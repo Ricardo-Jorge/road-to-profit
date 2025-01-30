@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Table from "react-bootstrap/Table";
 
-import style from "./MeuModal.Module.css";
+import style from "./MeuModal.module.css";
 
 const MeuModal = ({ isOpen, onClose, results, formData }) => {
   return (
