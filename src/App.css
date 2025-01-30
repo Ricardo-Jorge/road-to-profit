@@ -1,0 +1,10 @@
+.container {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-width: 90%;
+}
+h1 {
+  font-weight: bold;
+  margin-bottom: 20px;
+}

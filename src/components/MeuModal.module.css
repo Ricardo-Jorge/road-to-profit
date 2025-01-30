@@ -1,0 +1,18 @@
+.modal {
+  background-color: #121212;
+  color: #fefefe;
+}
+.profit {
+  color: green;
+  font-weight: bold;
+}
+
+.cost {
+  color: red;
+  font-weight: bold;
+}
+
+.values {
+  color: orange;
+  font-weight: bold;
+}
