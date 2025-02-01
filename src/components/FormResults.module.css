@@ -75,3 +75,29 @@ p {
 button {
   padding: 5px;
 }
+
+@media (width <= 375px) {
+  h1 {
+    margin: 0;
+    font-size: 25px;
+  }
+  .content_table th,
+  .content_table td {
+    padding: 6px 9px;
+  }
+  .content_table {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+    margin: 10px 5px;
+    font-size: 0.9em;
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    justify-content: space-between;
+  }
+
+  p {
+    font-size: smaller;
+  }
+}
