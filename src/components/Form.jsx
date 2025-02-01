@@ -1,8 +1,8 @@
 import { useState } from "react";
 import calculations from "../services/calculations";
-import Button from "react-bootstrap/esm/Button";
 import MeuModal from "./MeuModal";
 import style from "./Form.module.css";
+import FormResults from "./FormResults";
 
 const Form = () => {
   const [formData, setFormData] = useState({
@@ -210,18 +210,17 @@ const Form = () => {
           <span style={{ color: "red" }}>{formErrors.consumo}</span>
         )}
         <br />
-        <Button variant="primary" type="submit">
-          Calcular
-        </Button>
+        <button>Calcular</button>
       </form>
 
       {/* Modal */}
-      <MeuModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        results={calculationResults}
-        formData={formData}
-      />
+      <MeuModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <FormResults
+          results={calculationResults}
+          formData={formData}
+          onClose={() => setIsModalOpen(false)}
+        />
+      </MeuModal>
     </div>
   );
 };

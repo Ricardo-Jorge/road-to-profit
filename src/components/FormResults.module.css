@@ -1,0 +1,77 @@
+.modal {
+  padding: 10px 15px;
+  justify-content: center;
+}
+
+h1 {
+  margin: 10px 0;
+}
+
+.content_table {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+  margin: 10px 5px;
+  font-size: 0.9em;
+  border-radius: 10px 10px 0 0;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  justify-content: space-between;
+}
+
+.content_table thead tr {
+  background-color: #313131;
+  color: #fff;
+  font-weight: bold;
+}
+
+.content_table th,
+.content_table td {
+  padding: 8px 11px;
+}
+
+.content_table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.content_table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.content_table tbody tr:hover {
+  font-weight: bold;
+  background-color: #c2c2c2;
+}
+
+.coluna_1 {
+  text-align: left;
+}
+
+.coluna_2 {
+  text-align: right;
+}
+
+p {
+  text-align: justify;
+  padding: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.profit {
+  color: green;
+  font-weight: bold;
+}
+
+.cost {
+  color: red;
+  font-weight: bold;
+}
+
+.values {
+  color: orange;
+  font-weight: bold;
+}
+
+button {
+  padding: 5px;
+}
