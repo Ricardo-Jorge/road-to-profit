@@ -1,32 +1,22 @@
+import style from "./FormFinanciado.module.css";
 import { useState } from "react";
-import calculations from "../services/calculations";
-import MeuModal from "./MeuModal";
-import style from "./Form.module.css";
-import FormResults from "./FormResults";
 
-const Form = () => {
-  const [formData, setFormData] = useState({
-    lucroEsperado: "",
-    valorFranquiaSem: "",
-    kilometragemSem: "",
-    diasTrabalhado: "",
-    horasTrabalhada: "",
-    precoCombustivel: "",
-    consumo: "",
+const FormFinanciado = () => {
+  const [formDataFinanciado, setFormDataFinanciado] = useState({
+    lucroEsperado: 0,
+    parcelaFinanciamento: 0,
+    ipva: 0,
+    licenciamento: 0,
+    seguro: 0,
+    manutencao: 0,
+    kilometragemMes: 0,
+    diasTrabalhado: 0,
+    horasTrabalhada: 0,
+    precoCombustivel: 0,
+    consumo: 0,
   });
   const [formErrors, setFormErrors] = useState({});
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [calculationResults, setCalculationResults] = useState({
-    custoAluguelDia: 0,
-    custoAluguelMensal: 0,
-    custoCombustivelSem: 0,
-    consumoDiario: 0,
-    faturamentoTotal: 0,
-    faturamentoDiario: 0,
-    faturamentoHora: 0,
-    faturamentoKm: 0,
-    custoDiario: 0,
-  });
+  //   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const validateField = (name, value) => {
     let error = "";
@@ -45,8 +35,12 @@ const Form = () => {
         break;
 
       case "lucroEsperado":
-      case "valorFranquiaSem":
-      case "kilometragemSem":
+      case "parcelaFinanciamento":
+      case "kilometragemMes":
+      case "ipva":
+      case "licenciamento":
+      case "seguro":
+      case "manutencao":
       case "diasTrabalhado":
       case "precoCombustivel":
       case "consumo":
@@ -71,7 +65,7 @@ const Form = () => {
     const { name, value } = e.target;
 
     // Atualiza o valor do campo
-    setFormData((prevData) => ({
+    setFormDataFinanciado((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -83,24 +77,9 @@ const Form = () => {
       [name]: error,
     }));
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const results = {
-      custoAluguelDia: calculations.custoAluguelDia(formData),
-      custoAluguelMensal: calculations.custoAluguelMensal(formData),
-      custoCombustivelSem: calculations.custoCombustivelSem(formData),
-      consumoDiario: calculations.consumoDiario(formData),
-      faturamentoTotal: calculations.faturamentoTotal(formData),
-      faturamentoDiario: calculations.faturamentoDiario(formData),
-      faturamentoHora: calculations.faturamentoHora(formData),
-      faturamentoKm: calculations.faturamentoKm(formData),
-      custoDiario: calculations.custoDiario(formData),
-    };
-
-    setCalculationResults(results);
-    setIsModalOpen(true);
+    console.log(formDataFinanciado);
   };
 
   return (
@@ -112,7 +91,7 @@ const Form = () => {
             type="text"
             name="lucroEsperado"
             placeholder="Ex: 5000"
-            value={formData.lucroEsperado}
+            value={formDataFinanciado.lucroEsperado || ""}
             onChange={handleInputChange}
             required
           />
@@ -121,32 +100,90 @@ const Form = () => {
           <span style={{ color: "red" }}>{formErrors.lucroEsperado}</span>
         )}
         <label>
-          Valor Franquia (Semanal): <br />
+          Valor Parcela Financiamento: <br />
           <input
             type="text"
-            name="valorFranquiaSem"
+            name="parcelaFinanciamento"
             placeholder="Ex: 750"
-            value={formData.valorFranquiaSem || ""}
+            value={formDataFinanciado.parcelaFinanciamento || ""}
             onChange={handleInputChange}
             required
           />
         </label>
-        {formErrors.valorFranquiaSem && (
-          <span style={{ color: "red" }}>{formErrors.valorFranquiaSem}</span>
+        {formErrors.parcelaFinanciamento && (
+          <span style={{ color: "red" }}>
+            {formErrors.parcelaFinanciamento}
+          </span>
         )}
         <label>
-          Quilometragem (Semanal): <br />
+          IPVA: <br />
           <input
             type="text"
-            name="kilometragemSem"
-            placeholder="Ex: 1250"
-            value={formData.kilometragemSem || ""}
+            name="ipva"
+            placeholder="Ex: 750"
+            value={formDataFinanciado.ipva || ""}
             onChange={handleInputChange}
             required
           />
         </label>
-        {formErrors.kilometragemSem && (
-          <span style={{ color: "red" }}>{formErrors.kilometragemSem}</span>
+        {formErrors.ipva && (
+          <span style={{ color: "red" }}>{formErrors.ipva}</span>
+        )}
+        <label>
+          Taxa de Licenciamento: <br />
+          <input
+            type="text"
+            name="licenciamento"
+            placeholder="Ex: 750"
+            value={formDataFinanciado.licenciamento || ""}
+            onChange={handleInputChange}
+            required
+          />
+        </label>
+        {formErrors.licenciamento && (
+          <span style={{ color: "red" }}>{formErrors.licenciamento}</span>
+        )}
+        <label>
+          Seguro do Veículo: <br />
+          <input
+            type="text"
+            name="seguro"
+            placeholder="Ex: 750"
+            value={formDataFinanciado.seguro || ""}
+            onChange={handleInputChange}
+            required
+          />
+        </label>
+        {formErrors.seguro && (
+          <span style={{ color: "red" }}>{formErrors.seguro}</span>
+        )}
+        <label>
+          Manutenção preventiva e reparos(Mensal): <br />
+          <input
+            type="text"
+            name="manutencao"
+            placeholder="Ex: 750"
+            value={formDataFinanciado.manutencao || ""}
+            onChange={handleInputChange}
+            required
+          />
+        </label>
+        {formErrors.manutencao && (
+          <span style={{ color: "red" }}>{formErrors.manutencao}</span>
+        )}
+        <label>
+          Estimativa de Km Rodados(Mês): <br />
+          <input
+            type="text"
+            name="kilometragemMes"
+            placeholder="Ex: 1250"
+            value={formDataFinanciado.kilometragemMes || ""}
+            onChange={handleInputChange}
+            required
+          />
+        </label>
+        {formErrors.kilometragemMes && (
+          <span style={{ color: "red" }}>{formErrors.kilometragemMes}</span>
         )}
         <label>
           Dias trabalhado por semana: <br />
@@ -154,7 +191,7 @@ const Form = () => {
             type="text"
             name="diasTrabalhado"
             placeholder="Ex: 7"
-            value={formData.diasTrabalhado || ""}
+            value={formDataFinanciado.diasTrabalhado || ""}
             onChange={handleInputChange}
             required
           />
@@ -168,7 +205,7 @@ const Form = () => {
             type="text"
             name="horasTrabalhada"
             placeholder="Ex: 8"
-            value={formData.horasTrabalhada || ""}
+            value={formDataFinanciado.horasTrabalhada || ""}
             onChange={handleInputChange}
             required
           />
@@ -182,7 +219,7 @@ const Form = () => {
             type="text"
             name="precoCombustivel"
             placeholder="Ex: 4.16"
-            value={formData.precoCombustivel || ""}
+            value={formDataFinanciado.precoCombustivel || ""}
             onChange={handleInputChange}
           />
         </label>
@@ -195,7 +232,7 @@ const Form = () => {
             type="text"
             name="consumo"
             placeholder="Ex: 10.9"
-            value={formData.consumo || ""}
+            value={formDataFinanciado.consumo || ""}
             onChange={handleInputChange}
             required
           />
@@ -205,17 +242,8 @@ const Form = () => {
         )}
         <button>Calcular</button>
       </form>
-
-      {/* Modal */}
-      <MeuModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <FormResults
-          results={calculationResults}
-          formData={formData}
-          onClose={() => setIsModalOpen(false)}
-        />
-      </MeuModal>
     </div>
   );
 };
 
-export default Form;
+export default FormFinanciado;

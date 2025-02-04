@@ -1,19 +1,29 @@
 import "./App.css";
-import Form from "./components/Form";
+
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./pages/Home/Home";
+import FormAluguel from "./pages/Form/FormAluguel";
+import FormFinanciamento from "./pages/Form/FormFinanciamento";
 import Navbar from "./components/Navbar";
 
 function App() {
   return (
-    <>
-      <Navbar />
-      <div className="container">
-        <h1>Calculadora de Custos (Uber):</h1>
-
-        <Form />
-
-        <br />
-      </div>
-    </>
+    <div>
+      <BrowserRouter>
+        <Navbar />
+        <div className="container">
+          <Routes>
+            <Route path="/" element={<Home />} />
+          </Routes>
+          <Routes>
+            <Route path="/alugado" element={<FormAluguel />} />
+          </Routes>
+          <Routes>
+            <Route path="/financiado" element={<FormFinanciamento />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </div>
   );
 }
 

@@ -1,16 +1,35 @@
 .nav {
   display: flex;
-  justify-content: center;
+  flex-wrap: nowrap;
+  justify-content: space-between;
   align-items: center;
   background-color: #121212;
   border-bottom: 1px solid #363636;
-  padding: 0.1em 1em;
-  color: #ff922a;
+  padding: 2px;
   margin-bottom: 20px;
+  font-size: 25px;
+  font-weight: bold;
 }
 
 .nav span {
-  font-size: 30px;
-  font-weight: bold;
-  margin: 10px;
+  color: #ff922a;
+  margin: 5px;
+}
+
+.nav span:hover {
+  color: #cc7422;
+}
+
+.nav ul {
+  list-style: none;
+  display: flex;
+}
+
+.nav ul li {
+  display: block;
+  margin: 5px;
+}
+
+button {
+  margin-bottom: 20px;
 }

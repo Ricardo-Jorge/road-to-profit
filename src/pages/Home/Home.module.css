@@ -1,0 +1,30 @@
+.home {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 180px;
+  height: 180px;
+  border-radius: 20px;
+  border: 2px solid rgb(10, 151, 21);
+  transition: 0.4s;
+  margin: 15px;
+}
+
+.button:hover {
+  border: 2.5px solid rgb(5, 112, 14);
+  cursor: pointer;
+}
+
+.button p {
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 25px;
+}
