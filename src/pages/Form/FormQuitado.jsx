@@ -3,6 +3,8 @@ import InputField from "../../components/InputField";
 import Label from "../../components/Label";
 import "./Form.css";
 import calculationsQuitado from "../../services/calculationsQuitado";
+import MeuModal from "../../components/MeuModal";
+import FormResultsQuitado from "../../components/FormResultsQuitado";
 
 const FormQuitado = () => {
   const [formDataQuitado, setFormDataQuitado] = useState({
@@ -19,7 +21,7 @@ const FormQuitado = () => {
   });
 
   const [formErrors, setFormErrors] = useState({});
-  //   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [calculationsQuitadoResults, setCalculationsQuitadoResults] = useState({
     custoImpostosDia: 0,
     seguroDia: 0,
@@ -30,6 +32,8 @@ const FormQuitado = () => {
     custoTotal: 0,
     faturamentoTotal: 0,
     faturamentoDia: 0,
+    faturamentoHora: 0,
+    faturamentoKm: 0,
   });
 
   const validateField = (name, value) => {
@@ -104,9 +108,13 @@ const FormQuitado = () => {
       custoTotal: calculationsQuitado.custoTotal(formDataQuitado),
       faturamentoTotal: calculationsQuitado.faturamentoTotal(formDataQuitado),
       faturamentoDia: calculationsQuitado.faturamentoDia(formDataQuitado),
+      faturamentoHora: calculationsQuitado.faturamentoHora(formDataQuitado),
+      faturamentoKm: calculationsQuitado.faturamentoKm(formDataQuitado),
     };
 
     setCalculationsQuitadoResults(resultsQuitado);
+    setIsModalOpen(true);
+
     console.log(calculationsQuitadoResults);
   };
 
@@ -249,6 +257,16 @@ const FormQuitado = () => {
         )}
         <button>Calcular</button>
       </form>
+
+      {/* Modal */}
+
+      <MeuModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <FormResultsQuitado
+          resultsQuitado={calculationsQuitadoResults}
+          formDataQuitado={formDataQuitado}
+          onClose={() => setIsModalOpen(false)}
+        />
+      </MeuModal>
     </div>
   );
 };

@@ -87,6 +87,21 @@ export const faturamentoDia = (formDataQuitado) => {
   return faturamentoDiaValue;
 };
 
+export const faturamentoHora = (formDataQuitado) => {
+  const { horasTrabalhada } = formDataQuitado;
+  const faturamentoDiaValue = faturamentoDia(formDataQuitado);
+  const faturamentoHoraValue = faturamentoDiaValue / Number(horasTrabalhada);
+  return faturamentoHoraValue;
+};
+
+export const faturamentoKm = (formDataQuitado) => {
+  const { kilometragemMes } = formDataQuitado;
+  if (!kilometragemMes) return 0;
+  const faturamentoTotalValue = faturamentoTotal(formDataQuitado);
+  const faturamentoKmValue = faturamentoTotalValue / Number(kilometragemMes);
+  return faturamentoKmValue;
+};
+
 const calculationsQuitado = {
   custoImpostosDia,
   seguroDia,
@@ -97,6 +112,8 @@ const calculationsQuitado = {
   custoTotal,
   faturamentoTotal,
   faturamentoDia,
+  faturamentoHora,
+  faturamentoKm,
 };
 
 export default calculationsQuitado;

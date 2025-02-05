@@ -79,7 +79,7 @@ const FormResultsFinanciado = ({
         <span className={style.values}>
           {formDataFinanciado.kilometragemMes} quilômetros{" "}
         </span>
-        no mês, será necessário aceitar viagens com trarifas de, no minimo,{" "}
+        no mês, será necessário aceitar viagens com tarifas de, no minimo,{" "}
         <span className={style.profit}>R$ {}</span>. Seu custo diário será de{" "}
         <span className={style.cost}>
           R$ {resultsFinanciado.custoTotalDia.toFixed(2)}
