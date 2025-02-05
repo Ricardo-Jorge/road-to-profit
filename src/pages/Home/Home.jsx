@@ -13,6 +13,11 @@ const Home = () => {
           <p>Financiado</p>
         </NavLink>
       </div>
+      <div className={style.button}>
+        <NavLink to="/quitado">
+          <p>Quitado</p>
+        </NavLink>
+      </div>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 .home {
-  height: 100vh;
+  height: 80vh;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
 }
@@ -14,7 +15,7 @@
   border-radius: 20px;
   border: 2px solid rgb(10, 151, 21);
   transition: 0.4s;
-  margin: 15px;
+  margin: 10px;
 }
 
 .button:hover {

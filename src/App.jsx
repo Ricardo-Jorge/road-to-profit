@@ -5,6 +5,7 @@ import Home from "./pages/Home/Home";
 import FormAluguel from "./pages/Form/FormAluguel";
 import FormFinanciamento from "./pages/Form/FormFinanciamento";
 import Navbar from "./components/Navbar";
+import FormQuitado from "./pages/Form/FormQuitado";
 
 function App() {
   return (
@@ -20,6 +21,9 @@ function App() {
           </Routes>
           <Routes>
             <Route path="/financiado" element={<FormFinanciamento />} />
+          </Routes>
+          <Routes>
+            <Route path="/quitado" element={<FormQuitado />} />
           </Routes>
         </div>
       </BrowserRouter>

@@ -123,7 +123,7 @@ const FormFinanciado = () => {
     <div className={style.form}>
       <form onSubmit={handleSubmit}>
         <label>
-          Lucro Esperado (Mensal): <br />
+          Lucro Esperado (Mês): <br />
           <input
             type="text"
             name="lucroEsperado"
@@ -194,7 +194,7 @@ const FormFinanciado = () => {
           <span style={{ color: "red" }}>{formErrors.seguro}</span>
         )}
         <label>
-          Manutenção preventiva e reparos(Mensal): <br />
+          Manutenção preventiva e reparos(Mês): <br />
           <input
             type="text"
             name="manutencao"
@@ -221,7 +221,7 @@ const FormFinanciado = () => {
           <span style={{ color: "red" }}>{formErrors.kilometragemMes}</span>
         )}
         <label>
-          Folgas (Mensal): <br />
+          Folgas (Mês): <br />
           <input
             type="text"
             name="folgasMensal"
