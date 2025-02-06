@@ -17,8 +17,10 @@
   background-color: #fff;
   color: #121212;
   border-radius: 10px;
-  height: 85%;
-  min-width: 350px;
+  height: 550px;
+  max-height: 90%;
+  width: 500px;
+  max-width: 90%;
   padding: 5px;
   margin: 0;
 }

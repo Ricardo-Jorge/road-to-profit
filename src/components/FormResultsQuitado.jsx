@@ -4,7 +4,12 @@ import style from "./FormResults.module.css";
 const FormResultsQuitado = ({ onClose, resultsQuitado, formDataQuitado }) => {
   return (
     <div className={style.modal}>
-      <h1>Resultado do Calculo:</h1>
+      <div className={style.modal_header}>
+        <h1>Resultado do Calculo:</h1>
+        <button className={style.close_button} onClick={onClose}>
+          x
+        </button>
+      </div>
       <div>
         <table className={style.content_table}>
           <thead>
@@ -96,7 +101,6 @@ const FormResultsQuitado = ({ onClose, resultsQuitado, formDataQuitado }) => {
           R$ {resultsQuitado.faturamentoDia.toFixed(2)}
         </span>
       </p>
-      .<button onClick={onClose}>Close</button>
     </div>
   );
 };

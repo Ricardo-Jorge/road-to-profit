@@ -8,7 +8,13 @@ const FormResultsFinanciado = ({
 }) => {
   return (
     <div className={style.modal}>
-      <h1>Resultado do Calculo:</h1>
+      {" "}
+      <div className={style.modal_header}>
+        <h1>Resultado do Calculo:</h1>
+        <button className={style.close_button} onClick={onClose}>
+          x
+        </button>
+      </div>
       <div>
         <table className={style.content_table}>
           <thead>
@@ -25,21 +31,21 @@ const FormResultsFinanciado = ({
               </td>
             </tr>
             <tr>
-              <td className={style.coluna_1}>Faturamento Diário</td>
+              <td className={style.coluna_1}>Faturamento (Dia)</td>
               <td className={style.coluna_2}>
                 R$ {resultsFinanciado.faturamentoDia.toFixed(2)}
               </td>
             </tr>
             <tr>
-              <td className={style.coluna_1}>Custo Impostos (Diário)</td>
+              <td className={style.coluna_1}>Custo Total</td>
               <td className={style.coluna_2}>
-                R$ {resultsFinanciado.custoImpostosDia.toFixed(2)}
+                R$ {resultsFinanciado.custoTotal.toFixed(2)}
               </td>
             </tr>
             <tr>
-              <td className={style.coluna_1}>Custo Seguro (Diário) </td>
+              <td className={style.coluna_1}>Custo Total (Dia)</td>
               <td className={style.coluna_2}>
-                R$ {resultsFinanciado.seguroDia.toFixed(2)}
+                R$ {resultsFinanciado.custoTotalDia.toFixed(2)}
               </td>
             </tr>
             <tr>
@@ -49,21 +55,28 @@ const FormResultsFinanciado = ({
               </td>
             </tr>
             <tr>
-              <td className={style.coluna_1}>Custo Combustível (Mensal)</td>
+              <td className={style.coluna_1}>Custo Impostos (Dia)</td>
               <td className={style.coluna_2}>
-                R$ {resultsFinanciado.custoCombustivel.toFixed(2)}
+                R$ {resultsFinanciado.custoImpostosDia.toFixed(2)}
               </td>
             </tr>
             <tr>
-              <td className={style.coluna_1}>Custo Total (Diário)</td>
+              <td className={style.coluna_1}>Custo Seguro (Dia) </td>
               <td className={style.coluna_2}>
-                R$ {resultsFinanciado.custoTotalDia.toFixed(2)}
+                R$ {resultsFinanciado.seguroDia.toFixed(2)}
               </td>
             </tr>
+
             <tr>
-              <td className={style.coluna_1}>Custo Combustível (Diário)</td>
+              <td className={style.coluna_1}>Custo Combustível (Dia)</td>
               <td className={style.coluna_2}>
                 R$ {resultsFinanciado.custoCombustivelDia.toFixed(2)}
+              </td>
+            </tr>
+            <tr>
+              <td className={style.coluna_1}>Reserva Manutenção (Dia)</td>
+              <td className={style.coluna_2}>
+                R$ {resultsFinanciado.manutencaoDia.toFixed(2)}
               </td>
             </tr>
           </tbody>
@@ -80,7 +93,10 @@ const FormResultsFinanciado = ({
           {formDataFinanciado.kilometragemMes} quilômetros{" "}
         </span>
         no mês, será necessário aceitar viagens com tarifas de, no minimo,{" "}
-        <span className={style.profit}>R$ {}</span>. Seu custo diário será de{" "}
+        <span className={style.profit}>
+          R$ {resultsFinanciado.faturamentoKm.toFixed(2)}
+        </span>
+        . Seu custo diário será de{" "}
         <span className={style.cost}>
           R$ {resultsFinanciado.custoTotalDia.toFixed(2)}
         </span>
@@ -90,7 +106,6 @@ const FormResultsFinanciado = ({
         </span>
         .
       </p>
-      <button onClick={onClose}>Close</button>
     </div>
   );
 };

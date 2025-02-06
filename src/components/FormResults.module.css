@@ -75,8 +75,22 @@ p {
   font-weight: bold;
 }
 
-button {
+.modal_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.close_button {
+  background-color: #cf0a0a;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
   padding: 5px;
+  margin: 0;
+  font-weight: bold;
+  cursor: pointer;
+  opacity: 0.8;
+  font-size: 0.8em;
 }
 
 @media (width <= 375px) {

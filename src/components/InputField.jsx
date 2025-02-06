@@ -1,6 +1,4 @@
 /* eslint-disable react/prop-types */
-import style from "./Form.module.css";
-
 const InputField = ({
   name,
   type = "text",
@@ -10,7 +8,7 @@ const InputField = ({
   ...rest
 }) => {
   return (
-    <div className={style.form}>
+    <div>
       <input
         type={type}
         name={name}

@@ -102,6 +102,14 @@ export const faturamentoDia = (formDataFinanciado) => {
   return faturamentoDiaValue;
 };
 
+export const faturamentoKm = (formDataFinanciado) => {
+  const { kilometragemMes } = formDataFinanciado;
+  if (!kilometragemMes) return 0;
+  const faturamentoTotalValue = faturamentoTotal(formDataFinanciado);
+  const faturamentoKmValue = faturamentoTotalValue / Number(kilometragemMes);
+  return faturamentoKmValue;
+};
+
 const calculationsFinanciado = {
   custoFinanciamentoDia,
   custoImpostosDia,
@@ -113,6 +121,7 @@ const calculationsFinanciado = {
   custoTotal,
   faturamentoTotal,
   faturamentoDia,
+  faturamentoKm,
 };
 
 export default calculationsFinanciado;

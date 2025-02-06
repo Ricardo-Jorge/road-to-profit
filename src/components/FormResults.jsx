@@ -4,7 +4,12 @@ import style from "./FormResults.module.css";
 const FormResults = ({ onClose, results, formData }) => {
   return (
     <div className={style.modal}>
-      <h1>Resultado do Calculo:</h1>
+      <div className={style.modal_header}>
+        <h1>Resultado do Calculo:</h1>
+        <button className={style.close_button} onClick={onClose}>
+          x
+        </button>
+      </div>
       <div>
         <table className={style.content_table}>
           <thead>
@@ -21,43 +26,38 @@ const FormResults = ({ onClose, results, formData }) => {
               </td>
             </tr>
             <tr>
-              <td className={style.coluna_1}>Faturamento Diário</td>
+              <td className={style.coluna_1}>Faturamento Total (Dia)</td>
               <td className={style.coluna_2}>
                 R$ {results.faturamentoDiario.toFixed(2)}
               </td>
             </tr>
             <tr>
-              <td className={style.coluna_1}>Faturamento Hora</td>
+              <td className={style.coluna_1}>Faturamento (Hora)</td>
               <td className={style.coluna_2}>
                 R$ {results.faturamentoHora.toFixed(2)}
               </td>
             </tr>
+
             <tr>
-              <td className={style.coluna_1}>Faturamento por Km</td>
-              <td className={style.coluna_2}>
-                R$ {results.faturamentoKm.toFixed(2)}
-              </td>
-            </tr>
-            <tr>
-              <td className={style.coluna_1}>Custo Aluguel (Mensal)</td>
+              <td className={style.coluna_1}>Custo Aluguel (Mês)</td>
               <td className={style.coluna_2}>
                 R$ {results.custoAluguelMensal.toFixed(2)}
               </td>
             </tr>
             <tr>
-              <td className={style.coluna_1}>Custo Combustível (Semanal)</td>
+              <td className={style.coluna_1}>Custo Combustível (Semana)</td>
               <td className={style.coluna_2}>
                 R$ {results.custoCombustivelSem.toFixed(2)}
               </td>
             </tr>
             <tr>
-              <td className={style.coluna_1}>Custo Aluguel (Diário)</td>
+              <td className={style.coluna_1}>Custo Aluguel (Dia)</td>
               <td className={style.coluna_2}>
                 R$ {results.custoAluguelDia.toFixed(2)}
               </td>
             </tr>
             <tr>
-              <td className={style.coluna_1}>Custo Combustível (Diário)</td>
+              <td className={style.coluna_1}>Custo Combustível (Dia)</td>
               <td className={style.coluna_2}>
                 R$ {results.consumoDiario.toFixed(2)}
               </td>
@@ -84,7 +84,6 @@ const FormResults = ({ onClose, results, formData }) => {
         </span>
         .
       </p>
-      <button onClick={onClose}>Close</button>
     </div>
   );
 };

@@ -4,30 +4,3 @@
   flex-wrap: nowrap;
   align-items: center;
 }
-
-.label {
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  font-weight: bold;
-}
-
-.input {
-  background-color: #3b3b3b;
-  color: #aaa;
-  border: 1px solid #555;
-  border-radius: 5px;
-  padding: 5px 4px;
-  margin-bottom: 16px;
-  outline: none;
-  width: 350px;
-}
-
-.input::placeholder {
-  color: #aaa;
-}
-
-button {
-  margin: 10px;
-}
