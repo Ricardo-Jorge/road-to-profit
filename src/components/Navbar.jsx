@@ -1,20 +1,16 @@
 import { NavLink } from "react-router-dom";
 import "./Navbar.css";
+import logo from "../assets/logo.png";
 
 const Navbar = () => {
   return (
     <nav className="nav">
       <NavLink to="/">
-        <span>Road to Profit</span>
+        <span>
+          {" "}
+          <img src={logo} alt="" />
+        </span>
       </NavLink>
-      <ul>
-        <li>
-          <NavLink to="/alugado">Alugado</NavLink>
-        </li>
-        <li>
-          <NavLink to="/financiado">Financiado</NavLink>
-        </li>
-      </ul>
     </nav>
   );
 };

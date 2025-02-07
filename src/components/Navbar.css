@@ -1,23 +1,31 @@
 .nav {
   display: flex;
   flex-wrap: nowrap;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   background-color: #121212;
   border-bottom: 1px solid #363636;
   padding: 2px;
   margin-bottom: 20px;
-  font-size: 25px;
+  font-size: 30px;
   font-weight: bold;
+  text-transform: uppercase;
 }
 
 .nav span {
+  display: block;
   color: #ff922a;
-  margin: 5px;
 }
 
-.nav span:hover {
-  color: #cc7422;
+.nav span img {
+  width: 300px;
+  height: 25px;
+  padding: 15px;
+  transition: 0.3s;
+}
+
+.nav span img:hover {
+  width: 320px;
 }
 
 .nav ul {
