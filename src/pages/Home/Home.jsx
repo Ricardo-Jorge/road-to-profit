@@ -1,23 +1,35 @@
-import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import style from "./Home.module.css";
 const Home = () => {
+  const navigate = useNavigate();
+
+  const handleClick = (name) => {
+    return navigate(`/${name}`);
+  };
+
   return (
     <div className={style.home}>
-      <div className={style.button}>
-        <NavLink to="./alugado">
-          <p>Alugado</p>
-        </NavLink>
-      </div>
-      <div className={style.button}>
-        <NavLink to="/financiado">
-          <p>Financiado</p>
-        </NavLink>
-      </div>
-      <div className={style.button}>
-        <NavLink to="/quitado">
-          <p>Quitado</p>
-        </NavLink>
-      </div>
+      <button
+        className={style.button}
+        name="alugado"
+        onClick={() => handleClick("alugado")}
+      >
+        Alugado
+      </button>
+      <button
+        className={style.button}
+        name="financiado"
+        onClick={() => handleClick("financiado")}
+      >
+        Financiado
+      </button>
+      <button
+        className={style.button}
+        name="proprio"
+        onClick={() => handleClick("proprio")}
+      >
+        Próprio
+      </button>
     </div>
   );
 };

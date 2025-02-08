@@ -23,7 +23,7 @@ function App() {
             <Route path="/financiado" element={<FormFinanciamento />} />
           </Routes>
           <Routes>
-            <Route path="/quitado" element={<FormQuitado />} />
+            <Route path="/proprio" element={<FormQuitado />} />
           </Routes>
         </div>
       </BrowserRouter>
