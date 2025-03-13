@@ -1,15 +1,13 @@
-export const custoAluguelDia = (formData) => {
-  const { valorFranquiaSem, diasTrabalhado } = formData;
-  if (!valorFranquiaSem || !diasTrabalhado) return 0;
-  const aluguelMensalValue = (parseFloat(valorFranquiaSem) / 7) * 30;
-  return aluguelMensalValue / 26;
-};
-
 export const custoAluguelMensal = (formData) => {
   const { valorFranquiaSem } = formData;
   if (!valorFranquiaSem) return 0;
   const aluguelTotal = (parseFloat(valorFranquiaSem) / 7) * 30;
   return aluguelTotal;
+};
+
+export const custoAluguelDia = (formData) => {
+  const aluguelMensalValue = custoAluguelMensal(formData);
+  return aluguelMensalValue / 26;
 };
 
 export const custoCombustivelSem = (formData) => {
