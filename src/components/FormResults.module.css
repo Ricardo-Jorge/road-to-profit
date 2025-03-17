@@ -3,7 +3,7 @@
   justify-content: center;
 }
 
-h1 {
+.modal h1 {
   font-size: 1.2em;
   margin: 10px 0;
 }
@@ -52,9 +52,8 @@ h1 {
   text-align: right;
 }
 
-p {
+.modal p {
   font-size: 0.9em;
-
   text-align: justify;
   padding: 5px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
@@ -94,7 +93,7 @@ p {
 }
 
 @media (width <= 375px) {
-  h1 {
+  .modal h1 {
     margin: 0;
     font-size: 25px;
   }
@@ -114,7 +113,7 @@ p {
     justify-content: space-between;
   }
 
-  p {
+  .modal p {
     font-size: smaller;
   }
 }

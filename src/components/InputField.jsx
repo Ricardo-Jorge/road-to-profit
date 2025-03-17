@@ -8,16 +8,14 @@ const InputField = ({
   ...rest
 }) => {
   return (
-    <div>
-      <input
-        type={type}
-        name={name}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        {...rest}
-      ></input>
-    </div>
+    <input
+      type={type}
+      name={name}
+      placeholder={placeholder}
+      value={value}
+      onChange={onChange}
+      {...rest}
+    ></input>
   );
 };
 

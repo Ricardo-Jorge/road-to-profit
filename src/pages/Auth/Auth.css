@@ -1,22 +1,28 @@
 #login,
 #register {
   border: 1px solid #363636;
-  background-color: #000;
+  background-color: #121212;
+  color: aliceblue;
   padding: 1.5em 2em;
-  max-width: 33%;
+  min-width: 33%;
   margin: 2em auto;
 }
 
 #login h2,
 #register h2 {
+  font-family: "Angkor";
   text-align: center;
-  font-size: 2.1em;
+  text-transform: uppercase;
+  font-size: 1.7em;
+  color: #ff7904;
+  font-weight: lighter;
   margin-top: 0;
 }
 
 .subtitle {
   font-weight: bold;
-  color: #999;
+  color: #fdffff;
+  font-size: 1.1em;
   margin-bottom: 1.5em;
 }
 

@@ -5,16 +5,22 @@ const register = async (data) => {
   const config = requestConfig("post", data);
 
   try {
-    const res = await fetch(api + "/users/register", config)
-      .then((res) => res.json())
-      .catch((err) => err);
+    const res = await fetch(api + "/users/register", config);
 
-    if (res.id) {
-      localStorage.setItem("user", JSON.stringify(res));
+    if (!res.ok) {
+      const errorData = await res.json();
+      return { errors: errorData.errors || ["Erro ao registrar."] };
     }
-    return res;
+
+    const jsonData = await res.json();
+
+    if (jsonData.id) {
+      localStorage.setItem("user", JSON.stringify(jsonData));
+    }
+    return jsonData;
   } catch (error) {
     console.log(error);
+    return { errors: ["Erro ao registrar."] };
   }
 };
 
@@ -28,15 +34,23 @@ const login = async (data) => {
   const config = requestConfig("post", data);
 
   try {
-    const res = await fetch(api + "/users/login" + config);
+    const res = await fetch(api + "/users/login", config);
 
-    if (res.id) {
-      localStorage.setItem("user", JSON.stringify(res));
+    if (!res.ok) {
+      const errorData = await res.json();
+      return { errors: errorData.errors || ["Erro ao fazer login."] };
     }
 
-    return res;
+    const jsonData = await res.json();
+
+    if (jsonData.id) {
+      localStorage.setItem("user", JSON.stringify(jsonData));
+    }
+
+    return jsonData;
   } catch (error) {
     console.log(error);
+    return { errors: ["Erro ao fazer login."] };
   }
 };
 

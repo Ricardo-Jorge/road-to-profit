@@ -47,30 +47,43 @@ const Register = () => {
         Cadastre-se para iniciar sua rota para o lucro.
       </p>
       <form onSubmit={handleSubmit}>
-        <InputField
-          type="text"
-          placeholder={"Digite seu nome."}
-          onChange={(e) => setName(e.target.value)}
-          value={name || ""}
-        />
-        <InputField
-          type="text"
-          placeholder={"Digite seu E-mail."}
-          onChange={(e) => setEmail(e.target.value)}
-          value={email || ""}
-        />
-        <InputField
-          type="password"
-          placeholder={"Digite sua senha."}
-          onChange={(e) => setPassword(e.target.value)}
-          value={password || ""}
-        />
-        <InputField
-          type="password"
-          placeholder={"Digite sua senha."}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          value={confirmPassword || ""}
-        />
+        <label>
+          Nome: <br />
+          <InputField
+            type="text"
+            placeholder={"Digite seu nome."}
+            onChange={(e) => setName(e.target.value)}
+            value={name || ""}
+          />
+        </label>
+        <label>
+          E-mail: <br />
+          <InputField
+            type="text"
+            placeholder={"Digite seu E-mail."}
+            onChange={(e) => setEmail(e.target.value)}
+            value={email || ""}
+          />
+        </label>
+        <label>
+          Senha: <br />
+          <InputField
+            type="password"
+            placeholder={"Digite sua senha."}
+            onChange={(e) => setPassword(e.target.value)}
+            value={password || ""}
+          />
+        </label>
+        <label>
+          Confirmar Senha: <br />
+          <InputField
+            type="password"
+            placeholder={"Confirme sua senha."}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            value={confirmPassword || ""}
+          />
+        </label>
+
         {!loading && <input type="submit" value="Cadastrar" />}
         {loading && <input type="submit" value="Aguarde..." disabled />}
         {error && <Message msg={error} type="error" />}
