@@ -1,1 +1,170 @@
+.home_container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  min-height: 100vh; /* Garante que o container ocupe pelo menos a altura da tela */
+}
 
+.home_container h1 {
+  font-family: "Angkor";
+  color: #ff7904;
+  font-weight: lighter;
+  text-transform: uppercase;
+}
+
+.main {
+  display: flex;
+  flex-wrap: wrap; /* Permite que os itens quebrem em telas menores */
+  width: 100%;
+  min-height: auto; /* Remove altura fixa para se adaptar ao conteúdo */
+}
+
+.intro {
+  align-items: center;
+  margin: 20px; /* Reduz margem para telas menores */
+  max-width: 500px;
+  text-align: justify;
+  flex: 1; /* Garante que ocupe espaço disponível */
+}
+
+.main p {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.main_img {
+  margin: 20px;
+  flex: 1; /* Garante que a imagem ocupe espaço disponível */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main img {
+  max-width: 400px;
+  max-height: 400px;
+  border-radius: 40px;
+  box-shadow: 10px 5px 5px black;
+  transition: 0.7s;
+}
+
+.main img:hover {
+  scale: 1.04;
+}
+
+.logo {
+  font-family: "Angkor";
+  font-size: 20px;
+  color: #ff7904;
+  font-weight: lighter;
+}
+
+.profit {
+  color: #1b7c08;
+  font-size: 20px;
+}
+
+.cost {
+  color: #fa0f0f;
+  font-size: 20px;
+}
+
+.steps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  width: 100%;
+  min-height: auto; /* Remove altura fixa */
+  padding: 20px 0;
+}
+
+.cards {
+  height: 200px;
+  width: 200px;
+  background-color: aliceblue;
+  box-shadow: 5px 10px 18px #888888;
+  border-radius: 20px;
+  transition: 0.7s;
+  margin: 10px; /* Espaçamento entre cards */
+  display: flex;
+  justify-content: center;
+}
+
+.cards:hover {
+  transform: rotate(10deg);
+}
+
+.cards h2 {
+  text-align: center;
+}
+
+/* Estilo para a seção de botões (btn_section) */
+.btn_section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  width: 100%;
+}
+
+.btn_section h2 {
+  margin-bottom: 20px;
+}
+
+.btn_section button {
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 16px;
+  background-color: #ff7904;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn_section button:hover {
+  background-color: #e65b00;
+}
+
+/* Media Query para telas menores que 590px */
+@media (max-width: 590px) {
+  .main {
+    flex-direction: column; /* Empilha intro e imagem verticalmente */
+    height: auto; /* Remove altura fixa */
+  }
+
+  .intro {
+    margin: 10px; /* Reduz margem */
+    max-width: 100%; /* Ocupa toda a largura */
+  }
+
+  .main_img {
+    margin: 10px;
+  }
+
+  .main img {
+    max-width: 100%; /* Imagem se adapta à largura da tela */
+    max-height: 300px; /* Limita altura em telas menores */
+  }
+
+  .steps {
+    flex-direction: column; /* Empilha os cards verticalmente */
+    align-items: center;
+    height: auto;
+  }
+
+  .cards {
+    width: 80%; /* Cards ocupam 80% da largura */
+    margin: 10px auto; /* Centraliza e adiciona espaçamento */
+  }
+
+  .btn_section {
+    padding: 10px;
+  }
+
+  .btn_section button {
+    width: 80%; /* Botões ocupam mais espaço em telas menores */
+    margin: 5px 0;
+  }
+}

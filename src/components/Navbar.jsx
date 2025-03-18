@@ -27,7 +27,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="nav">
+    <nav className="navbar">
       <div className="navbar-container">
         <NavLink to="/">
           <span>

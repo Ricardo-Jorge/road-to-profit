@@ -1,5 +1,6 @@
-import { useNavigate } from "react-router-dom";
 import style from "./Home.module.css";
+import mainImgage from "../../assets/main-image.jpg";
+import { useNavigate } from "react-router-dom";
 const Home = () => {
   const navigate = useNavigate();
 
@@ -8,40 +9,49 @@ const Home = () => {
   };
 
   return (
-    <div>
-      <section>
-        <div>
-          <h1>Road to Profit</h1>
+    <div className={style.home_container}>
+      <section className={style.main}>
+        <div className={style.intro}>
           <p>
-            Calcule seus custos e lucros como motorista de aplicativo de forma
-            simples e eficiente.
+            <span className={style.logo}>Road to Profit</span> surgiu para você
+            que tem objetivo de alcançar um determinado{" "}
+            <span className={style.profit}>lucro</span> em sua jornada mas
+            esbarra nos complexos calculos de{" "}
+            <span className={style.cost}>custos</span> e como analisar essas
+            informações de forma correta.
           </p>
           <p>
-            Escolha entre as opções abaixo e descubra o melhor caminho para o
-            seu lucro.
+            Com a nossa ferramenta você vai escolher dentre três categorias de
+            calculo (Alugado, Financiado, Quitado), cada uma delas com seus
+            determinados custos. Ao final será gerado um relatório personalizado
+            com todas as informações necessárias para você conseguir alcançar o
+            seu lucro esperado.
           </p>
         </div>
+        <div className={style.main_img}>
+          <img src={mainImgage} alt="" />
+        </div>
       </section>
-      <section>
-        <button
-          className={style.button}
-          name="alugado"
-          onClick={() => handleClick("alugado")}
-        >
+      <section className={style.steps}>
+        <div className={style.cards}>
+          <h2>1° Passo:</h2>
+        </div>
+        <div className={style.cards}>
+          <h2>2° Passo:</h2>
+        </div>
+        <div className={style.cards}>
+          <h2>3° Passo:</h2>
+        </div>
+      </section>
+      <section className={style.btn_section}>
+        <h2>Escolha uma das categorias para começar:</h2>
+        <button name="alugado" onClick={() => handleClick("alugado")}>
           Alugado
         </button>
-        <button
-          className={style.button}
-          name="financiado"
-          onClick={() => handleClick("financiado")}
-        >
+        <button name="financiado" onClick={() => handleClick("financiado")}>
           Financiado
         </button>
-        <button
-          className={style.button}
-          name="quitado"
-          onClick={() => handleClick("quitado")}
-        >
+        <button name="quitado" onClick={() => handleClick("quitado")}>
           Quitado
         </button>
       </section>
