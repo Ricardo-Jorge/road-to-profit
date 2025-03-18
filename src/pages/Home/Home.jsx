@@ -1,5 +1,13 @@
 import style from "./Home.module.css";
+
+//Assets
 import mainImgage from "../../assets/main-image.jpg";
+import register from "../../assets/register.svg";
+import login from "../../assets/login.svg";
+import form from "../../assets/form.svg";
+import report from "../../assets/report.svg";
+import profit from "../../assets/profit.svg";
+
 import { useNavigate } from "react-router-dom";
 const Home = () => {
   const navigate = useNavigate();
@@ -32,17 +40,33 @@ const Home = () => {
           <img src={mainImgage} alt="" />
         </div>
       </section>
-      <section className={style.steps}>
+      <div className={style.steps}>
         <div className={style.cards}>
           <h2>1° Passo:</h2>
+          <img src={register} alt="" />
+          <p>Cadastrar</p>
         </div>
         <div className={style.cards}>
           <h2>2° Passo:</h2>
+          <img src={login} alt="" />
+          <p>Entrar</p>
         </div>
         <div className={style.cards}>
           <h2>3° Passo:</h2>
+          <img src={form} alt="" />
+          <p>Preencher Formulário</p>
         </div>
-      </section>
+        <div className={style.cards}>
+          <h2>4° Passo:</h2>
+          <img src={report} alt="" />
+          <p>Gerar Relatório</p>
+        </div>
+        <div className={style.cards}>
+          <h2>5° Passo:</h2>
+          <img src={profit} alt="" />
+          <p>Caminho para Lucro</p>
+        </div>
+      </div>
       <section className={style.btn_section}>
         <h2>Escolha uma das categorias para começar:</h2>
         <button name="alugado" onClick={() => handleClick("alugado")}>
