@@ -1,6 +1,148 @@
-.container {
+.form_container {
   display: flex;
   flex-direction: column;
-  flex-wrap: nowrap;
   align-items: center;
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #242424; /* Mesmo fundo do btn_section e footer */
+  border-radius: 20px;
+  box-shadow: 5px 10px 18px #2b2b2b;
+  box-sizing: border-box;
+}
+
+.form_container h1 {
+  font-family: "Angkor";
+  color: #ff7904; /* Cor laranja do tema */
+  font-weight: lighter;
+  text-transform: uppercase;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 15px; /* Espaço entre os campos */
+}
+
+.form label {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #fff; /* Texto branco para contraste */
+}
+
+.form input {
+  background-color: #3b3b3b;
+  color: #d6d5d5;
+  border: 1px solid #555;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 1rem;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form input::placeholder {
+  color: #b3b3b3;
+}
+
+.form button {
+  background-color: #ff7904; /* Cor laranja do tema */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 10px;
+}
+
+.form button:hover {
+  background-color: #e65b00; /* Tom mais escuro ao passar o mouse */
+}
+
+/* Media Queries para Responsividade */
+
+/* Telas grandes (≥1200px) */
+@media (min-width: 1200px) {
+  .form_container {
+    max-width: 600px;
+    padding: 30px;
+  }
+
+  .form_container h1 {
+    font-size: 2rem;
+  }
+
+  .form label {
+    font-size: 1.2rem;
+  }
+
+  .form input {
+    font-size: 1.1rem;
+    padding: 12px;
+  }
+
+  .form button {
+    font-size: 1.3rem;
+    padding: 12px;
+  }
+}
+
+/* Telas médias (591px a 1199px) */
+@media (max-width: 1199px) and (min-width: 591px) {
+  .form_container {
+    max-width: 500px;
+    padding: 20px;
+  }
+
+  .form_container h1 {
+    font-size: 1.8rem;
+  }
+
+  .form label {
+    font-size: 1.1rem;
+  }
+
+  .form input {
+    font-size: 1rem;
+    padding: 10px;
+  }
+}
+
+/* Telas pequenas (≤590px) */
+@media (max-width: 590px) {
+  .form_container {
+    max-width: 90%;
+    padding: 15px;
+    margin: 10px auto;
+  }
+
+  .form_container h1 {
+    font-size: 1.5rem;
+  }
+
+  .form label {
+    font-size: 1rem;
+  }
+
+  .form input {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  .form button {
+    font-size: 1.1rem;
+    padding: 8px;
+  }
 }

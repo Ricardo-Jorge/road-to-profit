@@ -122,8 +122,8 @@ const FormFinanciamento = () => {
     setIsModalOpen(true);
   };
   return (
-    <div className="container">
-      <h1>Calculadora de Custos (Financiamento):</h1>
+    <div className="form_container">
+      <h1>Financiado</h1>
       <form className="form" onSubmit={handleSubmit}>
         <label>
           Lucro Esperado (Mês): <br />

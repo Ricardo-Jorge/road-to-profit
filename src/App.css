@@ -1,7 +1,5 @@
 .container {
-  height: 80vh;
-  padding-left: 32px;
-  padding-right: 32px;
-  padding-top: 54px;
-  padding-bottom: 54px;
+  height: auto; /* Remove a altura fixa para se ajustar ao conteúdo */
+  width: 100%;
+  margin: 0 auto;
 }

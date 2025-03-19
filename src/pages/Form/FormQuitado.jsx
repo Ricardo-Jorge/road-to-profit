@@ -118,8 +118,8 @@ const FormQuitado = () => {
   };
 
   return (
-    <div className="container">
-      <h1>Calculadora de Custos (Uber):</h1>
+    <div className="form_container">
+      <h1>Quitado</h1>
       <form className="form" onSubmit={handleSubmit}>
         <label>
           Lucro Esperado (Mês): <br />

@@ -67,18 +67,20 @@ const Home = () => {
           <p>Caminho para Lucro</p>
         </div>
       </div>
-      <section className={style.btn_section}>
-        <h2>Escolha uma das categorias para começar:</h2>
-        <button name="alugado" onClick={() => handleClick("alugado")}>
-          Alugado
-        </button>
-        <button name="financiado" onClick={() => handleClick("financiado")}>
-          Financiado
-        </button>
-        <button name="quitado" onClick={() => handleClick("quitado")}>
-          Quitado
-        </button>
-      </section>
+      <div>
+        <section className={style.btn_section}>
+          <h2>Escolha uma das categorias para começar:</h2>
+          <button name="alugado" onClick={() => handleClick("alugado")}>
+            Alugado
+          </button>
+          <button name="financiado" onClick={() => handleClick("financiado")}>
+            Financiado
+          </button>
+          <button name="quitado" onClick={() => handleClick("quitado")}>
+            Quitado
+          </button>
+        </section>
+      </div>
     </div>
   );
 };

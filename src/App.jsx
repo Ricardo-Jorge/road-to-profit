@@ -8,6 +8,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 // Components
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 // Pages
 import Home from "./pages/Home/Home";
@@ -52,6 +53,7 @@ function App() {
             />
           </Routes>
         </div>
+        <Footer />
       </BrowserRouter>
     </div>
   );

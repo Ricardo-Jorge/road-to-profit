@@ -1,6 +1,7 @@
 #login,
 #register {
   border: 1px solid #363636;
+  border-radius: 20px;
   background-color: #121212;
   color: aliceblue;
   padding: 1.5em 2em;

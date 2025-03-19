@@ -104,9 +104,9 @@ const FormAluguel = () => {
     setIsModalOpen(true);
   };
   return (
-    <div className="container">
+    <div className="form_container">
       {" "}
-      <h1>Calculadora de Custos (Aluguel):</h1>
+      <h1>Alugado</h1>
       <form className="form" onSubmit={handleSubmit}>
         <label>
           Lucro Esperado (Mês): <br />
