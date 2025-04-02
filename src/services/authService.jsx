@@ -14,12 +14,18 @@ const register = async (data) => {
 
     const jsonData = await res.json();
 
-    if (jsonData.id) {
-      localStorage.setItem("user", JSON.stringify(jsonData));
+    // Padronizar o objeto salvo no localStorage
+    const userData = {
+      id: jsonData.user?.id || jsonData.id, // Compatível com diferentes respostas do backend
+      token: jsonData.token,
+    };
+
+    if (userData.id && userData.token) {
+      localStorage.setItem("user", JSON.stringify(userData));
     }
-    return jsonData;
+    return userData; // Retorna o formato padronizado para o authSlice
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return { errors: ["Erro ao registrar."] };
   }
 };
@@ -43,13 +49,18 @@ const login = async (data) => {
 
     const jsonData = await res.json();
 
-    if (jsonData.id) {
-      localStorage.setItem("user", JSON.stringify(jsonData));
-    }
+    // Padronizar o objeto salvo no localStorage
+    const userData = {
+      id: jsonData.id,
+      token: jsonData.token,
+    };
 
-    return jsonData;
+    if (userData.id && userData.token) {
+      localStorage.setItem("user", JSON.stringify(userData));
+    }
+    return userData;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return { errors: ["Erro ao fazer login."] };
   }
 };

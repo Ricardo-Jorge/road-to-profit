@@ -17,6 +17,7 @@ import FormFinanciamento from "./pages/Form/FormFinanciamento";
 import FormQuitado from "./pages/Form/FormQuitado";
 import Register from "./pages/Auth/Register";
 import Login from "./pages/Auth/Login";
+import Profile from "./pages/Profile/Profile";
 
 function App() {
   const { auth, loading } = useAuth();
@@ -38,6 +39,10 @@ function App() {
             <Route
               path="/login"
               element={!auth ? <Login /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/profile"
+              element={auth ? <Profile /> : <Navigate to="/login" />}
             />
             <Route
               path="/alugado"
