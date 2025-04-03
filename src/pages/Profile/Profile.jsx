@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   getAllFormsAlugado,
   createFormAlugado,
@@ -16,6 +16,8 @@ import { LuClipboardPlus } from "react-icons/lu";
 
 import "./Profile.css";
 import { format, parseISO } from "date-fns";
+import Loading from "../../components/Loading";
+import Message from "../../components/Message";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -23,7 +25,7 @@ const Profile = () => {
 
   const {
     forms: alugadoForms,
-    loading: loadingForm,
+    loading: formLoading,
     error: formError,
     success,
   } = useSelector((state) => state.formAlugado);
@@ -63,17 +65,9 @@ const Profile = () => {
     dispatch(deleteFormAlugado(id));
   };
 
-  if (userLoading || loadingForm) return <div>Carregando...</div>;
-  if (userError)
-    return (
-      <div style={{ color: "red" }}>Erro ao carregar perfil: {userError}</div>
-    );
-  if (formError)
-    return (
-      <div style={{ color: "red" }}>
-        Erro ao carregar formulários: {formError}
-      </div>
-    );
+  if (userLoading || formLoading) return <Loading />;
+  if (userError) return <Message msg={`${userError}`} type={"error"} />;
+  if (formError) return <Message msg={`${formError}`} type={"error"} />;
 
   // Função para formatar a data
   const formatDate = (dateString) => {
@@ -83,7 +77,7 @@ const Profile = () => {
       const date = parseISO(dateString); // Converte a string ISO para um objeto Date
       return format(date, "dd/MM/yyyy HH:mm"); // Formata no formato desejado
     } catch (error) {
-      return "Data inválida";
+      return console.error("Data inválida", error);
     }
   };
 
@@ -94,7 +88,7 @@ const Profile = () => {
   return (
     <div className="profile_container">
       <section className="user_info">
-        <h1>Bem vindo, {userData.name || "Usuário"}.</h1>
+        <h1>Bem vindo, {userData.name || "Usuário"}</h1>
         <div className="info_card">
           <p>
             <strong>Nome:</strong> {userData.name || "Não disponível"}
@@ -111,13 +105,19 @@ const Profile = () => {
 
       <section className="forms_list">
         <h2>Seus Formularios</h2>
-        {formError && <div style={{ color: "red" }}>{formError}</div>}
+        {formError && <Message msg={`${formError}`} type={"error"} />}
         {success && (
-          <div style={{ color: "green" }}>Ação realizada com sucesso!</div>
+          <Message msg={"Ação realizada com sucesso!"} type={"success"} />
         )}
 
         {formsDataAlugado.length === 0 ? (
-          <p>Nenhum formulário preenchido ainda.</p>
+          <div className="form_card">
+            <h3>Alugado</h3>
+            <p>Nenhum formulário preenchido ainda.</p>
+            <button title="Criar" onClick={() => handleCreateForm("Alugado")}>
+              <LuClipboardPlus />
+            </button>
+          </div>
         ) : (
           <div className="forms">
             <div className="form_card">

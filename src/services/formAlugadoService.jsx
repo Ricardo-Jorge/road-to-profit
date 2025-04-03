@@ -59,14 +59,16 @@ const updateFormAlugado = async (id, data, token) => {
 
 // Delete Form
 const deleteFormAlugado = async (id, token) => {
-  const config = requestConfig("DELETE", id, token);
+  const config = requestConfig("DELETE", null, token);
 
   try {
     const res = await fetch(api + "/forms/alugado/" + id, config);
-
+    if (!res.ok) {
+      throw new Error(`Erro ao deletar formulário.`);
+    }
     return res;
   } catch (error) {
-    console.error("Erro ao deletar formulário Alugado:", error);
+    console.error("Erro ao deletar formulário Alugado");
     throw error;
   }
 };

@@ -18,6 +18,7 @@ import FormQuitado from "./pages/Form/FormQuitado";
 import Register from "./pages/Auth/Register";
 import Login from "./pages/Auth/Login";
 import Profile from "./pages/Profile/Profile";
+import EditProfile from "./pages/Profile/EditProfile";
 
 function App() {
   const { auth, loading } = useAuth();
@@ -43,6 +44,10 @@ function App() {
             <Route
               path="/profile"
               element={auth ? <Profile /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/edit-profile"
+              element={auth ? <EditProfile /> : <Navigate to="/login" />}
             />
             <Route
               path="/alugado"

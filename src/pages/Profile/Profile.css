@@ -127,6 +127,18 @@
   align-items: center;
 }
 
+input {
+  background-color: #3b3b3b;
+  color: #d6d5d5;
+  border: 1px solid #555;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 1rem;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 /* Telas grandes (≥1200px) */
 @media (min-width: 1200px) {
   .user_info h1,

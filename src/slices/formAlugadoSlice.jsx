@@ -60,8 +60,8 @@ export const deleteFormAlugado = createAsyncThunk(
   async (id, { getState, rejectWithValue }) => {
     try {
       const token = getState().auth.user.token;
-      const res = await formAlugadoService.deleteFormAlugado(id, token);
-      return { id, res };
+      await formAlugadoService.deleteFormAlugado(id, token);
+      return id;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -113,7 +113,7 @@ const formAlugadoSlice = createSlice({
       .addCase(getAllFormsAlugado.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-        state.forms = [];
+        state.forms = {};
       })
 
       // Update Form
@@ -153,6 +153,7 @@ const formAlugadoSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
         state.success = false;
+        state.message = "Erro ao deletar formulário.";
       });
   },
 });
