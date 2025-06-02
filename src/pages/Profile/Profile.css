@@ -60,12 +60,15 @@
   background-color: #e65b00;
 }
 
-.forms_list {
+.forms_section {
   width: 100%;
   max-width: 1200px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.forms_list h2 {
+.forms_header {
   font-family: "Angkor";
   color: #ff7904;
   font-weight: lighter;
@@ -91,6 +94,7 @@
   width: 100%;
   max-width: 300px;
   text-align: center;
+  margin: 20px;
 }
 
 .form_card h3 {
@@ -180,6 +184,13 @@ input {
 
   .info_card {
     padding: 15px;
+  }
+
+  .form_list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
   }
 
   .form_card {

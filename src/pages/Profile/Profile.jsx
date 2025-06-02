@@ -1,34 +1,72 @@
-import { useEffect } from "react";
+// React
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+
+// Icons
+import {
+  BsClipboard2Data,
+  BsClipboard2Plus,
+  BsPencilSquare,
+  BsTrash,
+} from "react-icons/bs";
+
+// Slices - Alugado
 import {
   getAllFormsAlugado,
-  createFormAlugado,
-  updateFormAlugado,
   deleteFormAlugado,
   resetMessage,
+  updateFormAlugado,
 } from "../../slices/formAlugadoSlice";
 import { profile } from "../../slices/userSlice";
 
-import { FaRegEye } from "react-icons/fa6";
-import { MdOutlineDeleteForever } from "react-icons/md";
-import { LuClipboardPlus } from "react-icons/lu";
+// Slices - Financiado
+import {
+  getAllFormsFinanciado,
+  deleteFormFinanciado,
+  resetMessageFinanciado,
+  updateFormFinanciado,
+} from "../../slices/formFinanciadoSlice";
 
+//Styles
 import "./Profile.css";
-import { format, parseISO } from "date-fns";
+
+// Components
 import Loading from "../../components/Loading";
 import Message from "../../components/Message";
+
+import { format, parseISO } from "date-fns";
+
+import FormAluguel from "../Form/FormAluguel";
+import FormFinanciamento from "../Form/FormFinanciamento";
+import MeuModal from "../../components/MeuModal";
 
 const Profile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Estados para Modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formToEdit, setFormToEdit] = useState(null);
+  const [formType, setFormType] = useState("");
+  const [formData, setFormData] = useState({});
+
+  // Forms - Alugado
   const {
     forms: alugadoForms,
-    loading: formLoading,
-    error: formError,
-    success,
+    loading: alugadoLoading,
+    error: alugadoError,
+    success: alugadosuccess,
   } = useSelector((state) => state.formAlugado);
+  // Forms - Financiado
+  const {
+    forms: financiadoForms,
+    loading: financiadoLoading,
+    error: financiadoError,
+    success: financiadoSuccess,
+  } = useSelector((state) => state.formFinanciado);
+
+  // User and Auth
   const {
     user,
     loading: userLoading,
@@ -42,16 +80,29 @@ const Profile = () => {
     } else {
       dispatch(profile());
       dispatch(getAllFormsAlugado());
+      dispatch(getAllFormsFinanciado());
     }
   }, [dispatch, userAuth.token, navigate]);
 
   useEffect(() => {
-    if (formError || success) {
+    if (alugadoError || alugadosuccess) {
       setTimeout(() => {
         dispatch(resetMessage());
       }, 3000);
+
+      if (financiadoError || financiadoSuccess) {
+        setTimeout(() => {
+          dispatch(resetMessageFinanciado());
+        }, 3000);
+      }
     }
-  }, [formError, success, dispatch]);
+  }, [
+    alugadoError,
+    alugadosuccess,
+    financiadoError,
+    financiadoSuccess,
+    dispatch,
+  ]);
 
   const handleEditProfile = () => {
     navigate("/edit-profile");
@@ -61,13 +112,106 @@ const Profile = () => {
     navigate(`/${type.toLowerCase()}`);
   };
 
-  const handleDeleteForm = (id) => {
-    dispatch(deleteFormAlugado(id));
+  const handleDeleteForm = (id, type) => {
+    if (type === "Alugado") {
+      dispatch(deleteFormAlugado(id));
+    } else if (type === "Financiado") {
+      dispatch(deleteFormFinanciado(id));
+    }
   };
 
-  if (userLoading || formLoading) return <Loading />;
+  const handleEditForm = (form, type) => {
+    setFormToEdit(form);
+    setFormType(type);
+    setFormData({
+      ...(type === "Alugado" && {
+        lucroEsperado: Number(form.lucroEsperado) || "",
+        valorFranquiaSem: Number(form.valorFranquiaSem) || "",
+        precoCombustivel: Number(form.precoCombustivel) || "",
+        consumo: Number(form.consumo) || "",
+        diasTrabalhadosSem: Number(form.diasTrabalhadosSem) || "",
+        horasTrabalhadas: Number(form.horasTrabalhadas) || "",
+        kilometragemSem: Number(form.kilometragemSem) || "",
+      }),
+      ...(type === "Financiado" && {
+        lucroEsperado: form.lucroEsperado || "",
+        precoCombustivel: form.precoCombustivel || "",
+        consumo: form.consumo || "",
+        folgasMensal: form.folgasMensal || "",
+        horasTrabalhadas: form.horasTrabalhadas || "",
+        ipva: form.ipva || "",
+        licenciamento: form.licenciamento || "",
+        seguro: form.seguro || "",
+        manutencao: form.manutencao || "",
+        parcelaFinanciamento: form.parcelaFinanciamento || "",
+        kilometragemMes: form.kilometragemMes || "",
+      }),
+    });
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setFormToEdit(null);
+    setFormType("");
+    setFormData({});
+  };
+
+  const handleUpdateForm = (e) => {
+    e.preventDefault();
+    if (!formToEdit || !formType) return;
+
+    const updatedForm = {
+      id: formToEdit.id,
+      ...formData,
+    };
+
+    const actionMap = {
+      Alugado: updateFormAlugado,
+      Financiado: updateFormFinanciado,
+    };
+
+    const action = actionMap[formType];
+
+    if (action) {
+      dispatch(action(updatedForm))
+        .unwrap()
+        .then(() => {
+          setIsModalOpen(false);
+          setFormToEdit(null);
+          setFormType("");
+          setFormData({});
+        })
+        .catch((err) => {
+          console.error(`Erro ao atualizar formulário ${formType}: `, err);
+        });
+    }
+  };
+
+  const renderFormFields = () => {
+    switch (formType) {
+      case "Alugado":
+        return (
+          <>
+            <FormAluguel formData={formData} setFormData={setFormData} />
+          </>
+        );
+      case "Financiado":
+        return (
+          <>
+            <FormFinanciamento />
+          </>
+        );
+      default:
+        return null;
+    }
+  };
+
+  if (userLoading || alugadoLoading || financiadoLoading) return <Loading />;
   if (userError) return <Message msg={`${userError}`} type={"error"} />;
-  if (formError) return <Message msg={`${formError}`} type={"error"} />;
+  if (alugadoError) return <Message msg={`${alugadoError}`} type={"error"} />;
+  if (financiadoError)
+    return <Message msg={`${financiadoError}`} type={"error"} />;
 
   // Função para formatar a data
   const formatDate = (dateString) => {
@@ -84,6 +228,7 @@ const Profile = () => {
   // Ajuste para lidar com a estrutura aninhada, se necessário
   const userData = user.user || user; // Desaninha se necessário
   const formsDataAlugado = alugadoForms.forms || alugadoForms; // Desaninha se necessário
+  const formsDataFinanciado = financiadoForms.forms || financiadoForms; // Desaninha se necessário
 
   return (
     <div className="profile_container">
@@ -103,19 +248,18 @@ const Profile = () => {
         </div>
       </section>
 
-      <section className="forms_list">
-        <h2>Seus Formularios</h2>
-        {formError && <Message msg={`${formError}`} type={"error"} />}
-        {success && (
-          <Message msg={"Ação realizada com sucesso!"} type={"success"} />
-        )}
-
+      <h2 className="forms_header">Seus Formularios</h2>
+      {alugadoError && <Message msg={`${alugadoError}`} type={"error"} />}
+      {alugadosuccess && (
+        <Message msg={"Ação realizada com sucesso!"} type={"success"} />
+      )}
+      <section className="forms_section">
         {formsDataAlugado.length === 0 ? (
           <div className="form_card">
             <h3>Alugado</h3>
             <p>Nenhum formulário preenchido ainda.</p>
             <button title="Criar" onClick={() => handleCreateForm("Alugado")}>
-              <LuClipboardPlus />
+              <BsClipboard2Plus />
             </button>
           </div>
         ) : (
@@ -131,22 +275,70 @@ const Profile = () => {
                     </p>
                     <div>
                       <button
-                        title="Abrir"
+                        title="Editar"
+                        onClick={() => handleEditForm(form, "Alugado")}
+                      >
+                        <BsPencilSquare />
+                      </button>
+                      <button
+                        title="Ver relatório"
                         // onClick={() => handleViewReport(form)}
                       >
-                        <FaRegEye />
+                        <BsClipboard2Data />
                       </button>
                       <button
                         title="Deletar"
-                        onClick={() => handleDeleteForm(form.id)}
+                        onClick={() => handleDeleteForm(form.id, "alugado")}
                       >
-                        <MdOutlineDeleteForever />
+                        <BsTrash />
+                      </button>
+                    </div>
+                  </div>
+                </>
+              ))}
+            </div>
+          </div>
+        )}
+        {formsDataFinanciado.length === 0 ? (
+          <div className="form_card">
+            <h3>Financiado</h3>
+            <p>Nenhum formulário preenchido ainda.</p>
+            <button
+              title="Criar"
+              onClick={() => handleCreateForm("Financiado")}
+            >
+              <BsClipboard2Plus />
+            </button>
+          </div>
+        ) : (
+          <div className="forms">
+            <div className="form_card">
+              <h3>Financiado</h3>
+              {formsDataFinanciado.map((form) => (
+                <>
+                  <div className="form_list">
+                    <p key={form.id}>
+                      <strong>Criado:</strong>{" "}
+                      {formatDate(form.createdAt) || "Não disponível"}
+                    </p>
+                    <div>
+                      <button
+                        title="Editar"
+                        onClick={() => handleEditForm(form, "Financiado")}
+                      >
+                        <BsPencilSquare />
                       </button>
                       <button
-                        title="Criar"
-                        onClick={() => handleCreateForm("Alugado")}
+                        title="Ver relatório"
+                        // onClick={() => handleViewReport(form)}
                       >
-                        <LuClipboardPlus />
+                        <BsClipboard2Data />
+                      </button>
+                      <button
+                        title="Deletar"
+                        onClick={() => handleDeleteForm(form.id, "Financiado")}
+                      >
+                        <BsTrash />
                       </button>
                     </div>
                   </div>
@@ -156,6 +348,33 @@ const Profile = () => {
           </div>
         )}
       </section>
+      {/* Modal de Edição */}
+      {isModalOpen && (
+        <MeuModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+          <form onSubmit={handleUpdateForm}>
+            {renderFormFields()}
+            <div className="modal-actions">
+              <button
+                type="submit"
+                style={{ backgroundColor: "#FF6200", color: "#FFFFFF" }}
+              >
+                Salvar
+              </button>
+              <button
+                type="button"
+                onClick={handleCloseModal}
+                style={{
+                  backgroundColor: "#444",
+                  color: "#FFFFFF",
+                  marginLeft: "10px",
+                }}
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </MeuModal>
+      )}
     </div>
   );
 };

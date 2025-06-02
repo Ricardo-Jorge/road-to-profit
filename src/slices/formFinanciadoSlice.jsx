@@ -1,22 +1,25 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import formAlugadoService from "../services/formAlugadoService";
+import formFinanciadoService from "../services/formFinanciadoService";
 
 // Estado inicial
 const initialState = {
   forms: [],
-  loading: false,
+  Loading: false,
   error: null,
   success: false,
   message: null,
 };
 
-// Thunk create Form Alugado
-export const createFormAlugado = createAsyncThunk(
-  "formAlugado/create",
+// Thunk create Form Financiado
+export const createFormFinanciado = createAsyncThunk(
+  "formFinanciado/create",
   async (forms, { getState, rejectWithValue }) => {
     try {
       const token = getState().auth.user.token;
-      const res = await formAlugadoService.createFormAlugado(forms, token);
+      const res = await formFinanciadoService.createFormFinanciado(
+        forms,
+        token
+      );
       return res;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -25,104 +28,99 @@ export const createFormAlugado = createAsyncThunk(
 );
 
 // Thunk Get Forms
-export const getAllFormsAlugado = createAsyncThunk(
-  "formAlugado/getAll",
-  async (_, { getState, rejectWithValue }) => {
+export const getAllFormsFinanciado = createAsyncThunk(
+  "formFinanciado/getAll",
+  async (__dirname, { getState, rejectWithValue }) => {
     try {
       const token = getState().auth.user.token;
       if (!token) throw new Error("Não autorizado.");
-      const response = await formAlugadoService.getAllFormsAlugado(token);
-      return response;
+      const res = await formFinanciadoService.getAllFormsFinanciado(token);
+      return res;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
-// Thunk Update Form
-export const updateFormAlugado = createAsyncThunk(
-  "formAlugado/update",
-  async (forms, thunkAPI) => {
+// thunk Update form
+export const updateFormFinanciado = createAsyncThunk(
+  "formFinanciado/update",
+  async ({ id, forms }, { getState, rejectWithValue }) => {
     try {
-      const token = thunkAPI.getState().auth.user.token;
-      console.log("Token no thunk:", token);
-      const res = await formAlugadoService.updateFormAlugado(forms, token);
+      const token = getState().auth.user.token;
+      const res = await formFinanciadoService.updateFormFinanciado(
+        id,
+        forms,
+        token
+      );
       return res;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      return rejectWithValue(error);
     }
   }
 );
 
-// Thunk Delete Form
-export const deleteFormAlugado = createAsyncThunk(
-  "formAlugado/delete",
+// thunk Delete Form
+export const deleteFormFinanciado = createAsyncThunk(
+  "formFinanciado/delete",
   async (id, { getState, rejectWithValue }) => {
     try {
       const token = getState().auth.user.token;
-      await formAlugadoService.deleteFormAlugado(id, token);
+      await formFinanciadoService.deleteFormFinanciado(id, token);
       return id;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error);
     }
   }
 );
 
 // Slice
-const formAlugadoSlice = createSlice({
-  name: "formAlugado",
+const formFinanciadoSlice = createSlice({
+  name: "formFinanciado",
   initialState,
   reducers: {
-    // Redefine o estado de erro e sucesso
-    resetMessage: (state) => {
+    resetMessageFinanciado: (state) => {
       state.error = null;
       state.success = false;
     },
   },
   extraReducers: (builder) => {
     builder
-      // Create Form
-      .addCase(createFormAlugado.pending, (state) => {
+      .addCase(createFormFinanciado.pending, (state) => {
         state.loading = true;
         state.error = null;
-        state.success = false;
       })
-      .addCase(createFormAlugado.fulfilled, (state, action) => {
+      .addCase(createFormFinanciado.fulfilled, (state, action) => {
         state.loading = false;
         state.forms.push(action.payload);
         state.success = true;
         state.error = null;
       })
-      .addCase(createFormAlugado.rejected, (state, action) => {
+      .addCase(createFormFinanciado.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         state.success = false;
       })
-
-      // Get All Forms
-      .addCase(getAllFormsAlugado.pending, (state) => {
+      .addCase(getAllFormsFinanciado.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getAllFormsAlugado.fulfilled, (state, action) => {
+      .addCase(getAllFormsFinanciado.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.forms = action.payload;
         state.error = null;
       })
-      .addCase(getAllFormsAlugado.rejected, (state, action) => {
+      .addCase(getAllFormsFinanciado.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         state.forms = [];
       })
-
-      // Update Form
-      .addCase(updateFormAlugado.pending, (state) => {
+      .addCase(updateFormFinanciado.pending, (state) => {
         state.loading = true;
         state.error = null;
-        state.success = false;
       })
-      .addCase(updateFormAlugado.fulfilled, (state, action) => {
+      .addCase(updateFormFinanciado.fulfilled, (state, action) => {
         state.loading = false;
         const updatedForm = action.payload.form;
         if (updatedForm && updatedForm.id) {
@@ -133,18 +131,16 @@ const formAlugadoSlice = createSlice({
         }
         state.error = null;
       })
-      .addCase(updateFormAlugado.rejected, (state, action) => {
+      .addCase(updateFormFinanciado.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         state.success = false;
       })
-
-      // Delete Form
-      .addCase(deleteFormAlugado.pending, (state) => {
+      .addCase(deleteFormFinanciado.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(deleteFormAlugado.fulfilled, (state, action) => {
+      .addCase(deleteFormFinanciado.fulfilled, (state, action) => {
         state.loading = false;
         state.forms = state.forms.filter(
           (form) => form.id !== action.payload.id
@@ -152,15 +148,14 @@ const formAlugadoSlice = createSlice({
         state.success = true;
         state.error = null;
       })
-      .addCase(deleteFormAlugado.rejected, (state, action) => {
+      .addCase(deleteFormFinanciado.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         state.success = false;
-        state.message = "Erro ao deletar formulário.";
+        state.message = action.payload.message;
       });
   },
 });
 
-// exporta as ações e o reducer
-export const { resetMessage } = formAlugadoSlice.actions;
-export default formAlugadoSlice.reducer;
+export const { resetMessageFinanciado } = formFinanciadoSlice.actions;
+export default formFinanciadoSlice.reducer;

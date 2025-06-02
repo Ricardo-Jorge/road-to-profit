@@ -11,9 +11,7 @@ const createFormAlugado = async (data, token) => {
       throw new Error(`Erro ${res.status}: ${res.statusText}`);
     }
 
-    const data = await res.json();
-
-    return data;
+    return await res.json();
   } catch (error) {
     console.error("Erro ao criar formulário:", error);
     throw error;
@@ -22,9 +20,7 @@ const createFormAlugado = async (data, token) => {
 
 // Get Forms
 const getAllFormsAlugado = async (token) => {
-  console.log("Token recebido em getAllFormsAlugado:", token);
   const config = requestConfig("GET", null, token);
-  console.log("Configuração da requisição:", config);
   try {
     const res = await fetch(api + "/forms/alugado", config);
     if (!res.ok) {
@@ -32,25 +28,29 @@ const getAllFormsAlugado = async (token) => {
     }
     return await res.json();
   } catch (error) {
-    console.error("Erro ao localizar formulários:", error);
+    console.error("Erro ao localizar formulários: ", error);
     throw error;
   }
 };
 
 // Update Form
-const updateFormAlugado = async (id, data, token) => {
-  const config = requestConfig("PUT", data, id, token);
+const updateFormAlugado = async (data, token) => {
+  const config = requestConfig("PUT", data, token);
 
   try {
-    const res = await fetch(api + "/forms/alugado/" + id, config);
+    const res = await fetch(api + "/forms/alugado/" + data.id, config);
+    console.log("Dados enviados:", data);
+    console.log("Token enviado:", token);
+    console.log("Configuração:", config);
 
     if (!res.ok) {
       throw new Error(`Erro ${res.status}: ${res.statusText}`);
     }
 
-    const data = await res.json();
-
-    return data;
+    console.log("Objeto Response da API:", res); // Você já tem este
+    const responseData = await res.json();
+    console.log("DADOS RETORNADOS PELA API (após res.json()):", responseData); // <<< ADICIONE/VERIFIQUE ESTE LOG!
+    return responseData;
   } catch (error) {
     console.error("Erro ao atualizar formulário:", error);
     throw error;
@@ -68,7 +68,7 @@ const deleteFormAlugado = async (id, token) => {
     }
     return res;
   } catch (error) {
-    console.error("Erro ao deletar formulário Alugado");
+    console.error("Erro ao deletar formulário");
     throw error;
   }
 };
