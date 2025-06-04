@@ -17,6 +17,7 @@ import {
   deleteFormAlugado,
   resetMessage,
   updateFormAlugado,
+  createFormAlugado,
 } from "../../slices/formAlugadoSlice";
 import { profile } from "../../slices/userSlice";
 
@@ -26,6 +27,7 @@ import {
   deleteFormFinanciado,
   resetMessageFinanciado,
   updateFormFinanciado,
+  createFormFinanciado,
 } from "../../slices/formFinanciadoSlice";
 
 //Styles
@@ -108,8 +110,33 @@ const Profile = () => {
     navigate("/edit-profile");
   };
 
-  const handleCreateForm = (type) => {
-    navigate(`/${type.toLowerCase()}`);
+  const handleNewForm = (type) => {
+    setFormType(type);
+    setFormData({
+      ...(type === "Alugado" && {
+        lucroEsperado: "",
+        valorFranquiaSem: "",
+        precoCombustivel: "",
+        consumo: "",
+        diasTrabalhadosSem: "",
+        horasTrabalhadas: "",
+        kilometragemSem: "",
+      }),
+      ...(type === "Financiado" && {
+        lucroEsperado: "",
+        precoCombustivel: "",
+        consumo: "",
+        folgasMensal: "",
+        horasTrabalhadas: "",
+        ipva: "",
+        licenciamento: "",
+        seguro: "",
+        manutencao: "",
+        parcelaFinanciamento: "",
+        kilometragemMes: "",
+      }),
+    });
+    setIsModalOpen(true);
   };
 
   const handleDeleteForm = (id, type) => {
@@ -134,17 +161,17 @@ const Profile = () => {
         kilometragemSem: Number(form.kilometragemSem) || "",
       }),
       ...(type === "Financiado" && {
-        lucroEsperado: form.lucroEsperado || "",
-        precoCombustivel: form.precoCombustivel || "",
-        consumo: form.consumo || "",
-        folgasMensal: form.folgasMensal || "",
-        horasTrabalhadas: form.horasTrabalhadas || "",
-        ipva: form.ipva || "",
-        licenciamento: form.licenciamento || "",
-        seguro: form.seguro || "",
-        manutencao: form.manutencao || "",
-        parcelaFinanciamento: form.parcelaFinanciamento || "",
-        kilometragemMes: form.kilometragemMes || "",
+        lucroEsperado: Number(form.lucroEsperado) || "",
+        precoCombustivel: Number(form.precoCombustivel) || "",
+        consumo: Number(form.consumo) || "",
+        folgasMensal: Number(form.folgasMensal) || "",
+        horasTrabalhadas: Number(form.horasTrabalhadas) || "",
+        ipva: Number(form.ipva) || "",
+        licenciamento: Number(form.licenciamento) || "",
+        seguro: Number(form.seguro) || "",
+        manutencao: Number(form.manutencao) || "",
+        parcelaFinanciamento: Number(form.parcelaFinanciamento) || "",
+        kilometragemMes: Number(form.kilometragemMes) || "",
       }),
     });
     setIsModalOpen(true);
@@ -155,6 +182,34 @@ const Profile = () => {
     setFormToEdit(null);
     setFormType("");
     setFormData({});
+  };
+
+  const handleCreateForm = (e) => {
+    e.preventDefault();
+
+    const newForm = {
+      ...formData,
+    };
+
+    const actionMap = {
+      Alugado: createFormAlugado,
+      Financiado: createFormFinanciado,
+    };
+
+    const action = actionMap[formType];
+
+    if (action) {
+      dispatch(action(newForm))
+        .unwrap()
+        .then(() => {
+          setIsModalOpen(false);
+          setFormType("");
+          setFormData({});
+        })
+        .catch((err) => {
+          console.error(`Erro ao criar novo formulário ${formType}: `, err);
+        });
+    }
   };
 
   const handleUpdateForm = (e) => {
@@ -199,7 +254,7 @@ const Profile = () => {
       case "Financiado":
         return (
           <>
-            <FormFinanciamento />
+            <FormFinanciamento formData={formData} setFormData={setFormData} />
           </>
         );
       default:
@@ -258,7 +313,7 @@ const Profile = () => {
           <div className="form_card">
             <h3>Alugado</h3>
             <p>Nenhum formulário preenchido ainda.</p>
-            <button title="Criar" onClick={() => handleCreateForm("Alugado")}>
+            <button title="Criar" onClick={() => handleNewForm("Alugado")}>
               <BsClipboard2Plus />
             </button>
           </div>
@@ -288,7 +343,7 @@ const Profile = () => {
                       </button>
                       <button
                         title="Deletar"
-                        onClick={() => handleDeleteForm(form.id, "alugado")}
+                        onClick={() => handleDeleteForm(form.id, "Alugado")}
                       >
                         <BsTrash />
                       </button>
@@ -303,10 +358,7 @@ const Profile = () => {
           <div className="form_card">
             <h3>Financiado</h3>
             <p>Nenhum formulário preenchido ainda.</p>
-            <button
-              title="Criar"
-              onClick={() => handleCreateForm("Financiado")}
-            >
+            <button title="Criar" onClick={() => handleNewForm("Financiado")}>
               <BsClipboard2Plus />
             </button>
           </div>
@@ -351,14 +403,22 @@ const Profile = () => {
       {/* Modal de Edição */}
       {isModalOpen && (
         <MeuModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          <form onSubmit={handleUpdateForm}>
+          <form>
             {renderFormFields()}
             <div className="modal-actions">
               <button
-                type="submit"
+                type="button"
                 style={{ backgroundColor: "#FF6200", color: "#FFFFFF" }}
+                onClick={handleUpdateForm}
               >
                 Salvar
+              </button>
+              <button
+                type="button"
+                style={{ backgroundColor: "#FF6200", color: "#FFFFFF" }}
+                onClick={handleCreateForm}
+              >
+                Novo
               </button>
               <button
                 type="button"

@@ -16,6 +16,7 @@ export const createFormFinanciado = createAsyncThunk(
   async (forms, { getState, rejectWithValue }) => {
     try {
       const token = getState().auth.user.token;
+      if (!token) throw new Error("Não autorizado.");
       const res = await formFinanciadoService.createFormFinanciado(
         forms,
         token
@@ -30,7 +31,7 @@ export const createFormFinanciado = createAsyncThunk(
 // Thunk Get Forms
 export const getAllFormsFinanciado = createAsyncThunk(
   "formFinanciado/getAll",
-  async (__dirname, { getState, rejectWithValue }) => {
+  async (_, { getState, rejectWithValue }) => {
     try {
       const token = getState().auth.user.token;
       if (!token) throw new Error("Não autorizado.");
@@ -45,17 +46,16 @@ export const getAllFormsFinanciado = createAsyncThunk(
 // thunk Update form
 export const updateFormFinanciado = createAsyncThunk(
   "formFinanciado/update",
-  async ({ id, forms }, { getState, rejectWithValue }) => {
+  async (forms, thunkAPI) => {
     try {
-      const token = getState().auth.user.token;
+      const token = thunkAPI.getState().auth.user.token;
       const res = await formFinanciadoService.updateFormFinanciado(
-        id,
         forms,
         token
       );
       return res;
     } catch (error) {
-      return rejectWithValue(error);
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );

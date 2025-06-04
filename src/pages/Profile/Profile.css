@@ -143,6 +143,11 @@ input {
   box-sizing: border-box;
 }
 
+.modal-actions {
+  display: flex;
+  justify-content: space-around;
+}
+
 /* Telas grandes (≥1200px) */
 @media (min-width: 1200px) {
   .user_info h1,
