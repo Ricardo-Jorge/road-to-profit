@@ -1,46 +1,42 @@
 import { api, requestConfig } from "../utils/config";
 
 // Create Form
-const createFormFinanciado = async (data, token) => {
+const createFormQuitado = async (data, token) => {
   const config = requestConfig("POST", data, token);
   try {
-    const res = await fetch(api + "/forms/financiado", config);
+    const res = await fetch(api + "/forms/quitado", config);
 
     if (!res.ok) {
       throw new Error(`Erro ${res.status}: ${res.statusText}`);
     }
-
     return await res.json();
   } catch (error) {
-    console.error("Erro ao criar formulário: ", error);
+    console.error("Erro ao criar formulário.", error);
     throw error;
   }
 };
 
 // Get Forms
-const getAllFormsFinanciado = async (token) => {
-  const config = requestConfig("get", null, token);
+const getAllFormsQuitado = async (token) => {
+  const config = requestConfig("GET", null, token);
   try {
-    const res = await fetch(api + "/forms/financiado", config);
-
+    const res = await fetch(api + "/forms/quitado", config);
     if (!res.ok) {
       throw new Error(`Erro ${res.status}: ${res.statusText}`);
     }
 
     return await res.json();
   } catch (error) {
-    console.error("Erro ao localizar formulários: ", error);
+    console.error("Erro ao localizar formulários.", error);
     throw error;
   }
 };
 
 // Update Form
-const updateFormFinanciado = async (data, token) => {
+const updateFormQuitado = async (data, token) => {
   const config = requestConfig("PUT", data, token);
-
   try {
-    const res = await fetch(api + "/forms/financiado/" + data.id, config);
-
+    const res = await fetch(api + "/forms/quitado/" + data.id, config);
     if (!res.ok) {
       throw new Error(`Erro ${res.status}: ${res.statusText}`);
     }
@@ -53,11 +49,10 @@ const updateFormFinanciado = async (data, token) => {
 };
 
 // Delete Form
-const deleteFormFinanciado = async (id, token) => {
+const deleteFormQuitado = async (id, token) => {
   const config = requestConfig("DELETE", null, token);
-
   try {
-    const res = await fetch(api + "/forms/financiado/" + id, config);
+    const res = await fetch(api + "/forms/quitado/" + id, config);
     if (!res.ok) {
       throw new Error(`Erro ao deletar formulário.`);
     }
@@ -68,11 +63,11 @@ const deleteFormFinanciado = async (id, token) => {
   }
 };
 
-const formFinanciadoService = {
-  createFormFinanciado,
-  getAllFormsFinanciado,
-  updateFormFinanciado,
-  deleteFormFinanciado,
+const formQuitadoService = {
+  createFormQuitado,
+  getAllFormsQuitado,
+  updateFormQuitado,
+  deleteFormQuitado,
 };
 
-export default formFinanciadoService;
+export default formQuitadoService;

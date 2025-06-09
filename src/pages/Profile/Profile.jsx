@@ -30,6 +30,15 @@ import {
   createFormFinanciado,
 } from "../../slices/formFinanciadoSlice";
 
+// Slices - Quitado
+import {
+  getAllFormsQuitado,
+  deleteFormQuitado,
+  resetMessageQuitado,
+  updateFormQuitado,
+  createFormQuitado,
+} from "../../slices/formQuitadoSlice";
+
 //Styles
 import "./Profile.css";
 
@@ -41,6 +50,7 @@ import { format, parseISO } from "date-fns";
 
 import FormAluguel from "../Form/FormAluguel";
 import FormFinanciamento from "../Form/FormFinanciamento";
+import FormQuitado from "../Form/FormQuitado";
 import MeuModal from "../../components/MeuModal";
 
 const Profile = () => {
@@ -60,6 +70,7 @@ const Profile = () => {
     error: alugadoError,
     success: alugadosuccess,
   } = useSelector((state) => state.formAlugado);
+
   // Forms - Financiado
   const {
     forms: financiadoForms,
@@ -67,6 +78,14 @@ const Profile = () => {
     error: financiadoError,
     success: financiadoSuccess,
   } = useSelector((state) => state.formFinanciado);
+
+  // Forms - Quitado
+  const {
+    forms: quitadoForms,
+    loading: quitadoLoading,
+    error: quitadoError,
+    success: quitadoSuccess,
+  } = useSelector((state) => state.formQuitado);
 
   // User and Auth
   const {
@@ -83,6 +102,7 @@ const Profile = () => {
       dispatch(profile());
       dispatch(getAllFormsAlugado());
       dispatch(getAllFormsFinanciado());
+      dispatch(getAllFormsQuitado());
     }
   }, [dispatch, userAuth.token, navigate]);
 
@@ -97,12 +117,20 @@ const Profile = () => {
           dispatch(resetMessageFinanciado());
         }, 3000);
       }
+
+      if (quitadoError || quitadoSuccess) {
+        setTimeout(() => {
+          dispatch(resetMessageQuitado());
+        }, 3000);
+      }
     }
   }, [
     alugadoError,
     alugadosuccess,
     financiadoError,
     financiadoSuccess,
+    quitadoError,
+    quitadoSuccess,
     dispatch,
   ]);
 
@@ -135,6 +163,18 @@ const Profile = () => {
         parcelaFinanciamento: "",
         kilometragemMes: "",
       }),
+      ...(type === "Quitado" && {
+        lucroEsperado: "",
+        precoCombustivel: "",
+        consumo: "",
+        folgasMensal: "",
+        horasTrabalhadas: "",
+        ipva: "",
+        licenciamento: "",
+        seguro: "",
+        manutencao: "",
+        kilometragemMes: "",
+      }),
     });
     setIsModalOpen(true);
   };
@@ -144,6 +184,8 @@ const Profile = () => {
       dispatch(deleteFormAlugado(id));
     } else if (type === "Financiado") {
       dispatch(deleteFormFinanciado(id));
+    } else if (type === "Quitado") {
+      dispatch(deleteFormQuitado(id));
     }
   };
 
@@ -173,6 +215,18 @@ const Profile = () => {
         parcelaFinanciamento: Number(form.parcelaFinanciamento) || "",
         kilometragemMes: Number(form.kilometragemMes) || "",
       }),
+      ...(type === "Quitado" && {
+        lucroEsperado: Number(form.lucroEsperado) || "",
+        precoCombustivel: Number(form.precoCombustivel) || "",
+        consumo: Number(form.consumo) || "",
+        folgasMensal: Number(form.folgasMensal) || "",
+        horasTrabalhadas: Number(form.horasTrabalhadas) || "",
+        ipva: Number(form.ipva) || "",
+        licenciamento: Number(form.licenciamento) || "",
+        seguro: Number(form.seguro) || "",
+        manutencao: Number(form.manutencao) || "",
+        kilometragemMes: Number(form.kilometragemMes) || "",
+      }),
     });
     setIsModalOpen(true);
   };
@@ -194,6 +248,7 @@ const Profile = () => {
     const actionMap = {
       Alugado: createFormAlugado,
       Financiado: createFormFinanciado,
+      Quitado: createFormQuitado,
     };
 
     const action = actionMap[formType];
@@ -224,6 +279,7 @@ const Profile = () => {
     const actionMap = {
       Alugado: updateFormAlugado,
       Financiado: updateFormFinanciado,
+      Quitado: updateFormQuitado,
     };
 
     const action = actionMap[formType];
@@ -257,16 +313,24 @@ const Profile = () => {
             <FormFinanciamento formData={formData} setFormData={setFormData} />
           </>
         );
+      case "Quitado":
+        return (
+          <>
+            <FormQuitado />
+          </>
+        );
       default:
         return null;
     }
   };
 
-  if (userLoading || alugadoLoading || financiadoLoading) return <Loading />;
+  if (userLoading || alugadoLoading || financiadoLoading || quitadoLoading)
+    return <Loading />;
   if (userError) return <Message msg={`${userError}`} type={"error"} />;
   if (alugadoError) return <Message msg={`${alugadoError}`} type={"error"} />;
   if (financiadoError)
     return <Message msg={`${financiadoError}`} type={"error"} />;
+  if (quitadoError) return <Message msg={`${quitadoError}`} type={"error"} />;
 
   // Função para formatar a data
   const formatDate = (dateString) => {
@@ -284,6 +348,7 @@ const Profile = () => {
   const userData = user.user || user; // Desaninha se necessário
   const formsDataAlugado = alugadoForms.forms || alugadoForms; // Desaninha se necessário
   const formsDataFinanciado = financiadoForms.forms || financiadoForms; // Desaninha se necessário
+  const formsDataQuitado = quitadoForms.forms || quitadoForms; // Desaninha se necessário
 
   return (
     <div className="profile_container">
@@ -389,6 +454,51 @@ const Profile = () => {
                       <button
                         title="Deletar"
                         onClick={() => handleDeleteForm(form.id, "Financiado")}
+                      >
+                        <BsTrash />
+                      </button>
+                    </div>
+                  </div>
+                </>
+              ))}
+            </div>
+          </div>
+        )}
+        {formsDataQuitado.length === 0 ? (
+          <div className="form_card">
+            <h3>Quitado</h3>
+            <p>Nenhum formulário preenchido ainda.</p>
+            <button title="Criar" onClick={() => handleNewForm("Quitado")}>
+              <BsClipboard2Plus />
+            </button>
+          </div>
+        ) : (
+          <div className="forms">
+            <div className="form_card">
+              <h3>Quitado</h3>
+              {formsDataQuitado.map((form) => (
+                <>
+                  <div className="form_list">
+                    <p key={form.id}>
+                      <strong>Criado:</strong>{" "}
+                      {formatDate(form.createdAt) || "Não disponível"}
+                    </p>
+                    <div>
+                      <button
+                        title="Editar"
+                        onClick={() => handleEditForm(form, "Quitado")}
+                      >
+                        <BsPencilSquare />
+                      </button>
+                      <button
+                        title="Ver relatório"
+                        // onClick={() => handleViewReport(form)}
+                      >
+                        <BsClipboard2Data />
+                      </button>
+                      <button
+                        title="Deletar"
+                        onClick={() => handleDeleteForm(form.id, "Quitado")}
                       >
                         <BsTrash />
                       </button>
