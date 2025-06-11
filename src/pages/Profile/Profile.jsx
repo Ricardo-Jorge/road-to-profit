@@ -238,7 +238,7 @@ const Profile = () => {
     setFormData({});
   };
 
-  const handleCreateForm = (e) => {
+  const handleCreateForm = async (e) => {
     e.preventDefault();
 
     const newForm = {
@@ -253,17 +253,18 @@ const Profile = () => {
 
     const action = actionMap[formType];
 
-    if (action) {
-      dispatch(action(newForm))
-        .unwrap()
-        .then(() => {
-          setIsModalOpen(false);
-          setFormType("");
-          setFormData({});
-        })
-        .catch((err) => {
-          console.error(`Erro ao criar novo formulário ${formType}: `, err);
-        });
+    try {
+      if (action) {
+        await dispatch(action(newForm))
+          .unwrap()
+          .then(() => {
+            setIsModalOpen(false);
+            setFormType("");
+            setFormData({});
+          });
+      }
+    } catch (rejectedValue) {
+      console.error("Falha ao criar formulário:", rejectedValue);
     }
   };
 
@@ -316,7 +317,7 @@ const Profile = () => {
       case "Quitado":
         return (
           <>
-            <FormQuitado />
+            <FormQuitado formData={formData} setFormData={setFormData} />
           </>
         );
       default:
@@ -370,6 +371,10 @@ const Profile = () => {
 
       <h2 className="forms_header">Seus Formularios</h2>
       {alugadoError && <Message msg={`${alugadoError}`} type={"error"} />}
+      {quitadoError &&
+        quitadoError.map((msg, i) => (
+          <Message key={i} msg={`${msg}`} type={"error"} />
+        ))}
       {alugadosuccess && (
         <Message msg={"Ação realizada com sucesso!"} type={"success"} />
       )}

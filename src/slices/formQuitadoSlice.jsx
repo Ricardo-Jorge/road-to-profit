@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import formQuitadoService from "../services/formQuitadoService";
-import formFinanciadoService from "../services/formFinanciadoService";
 
 // Initial State
 const initialState = {
@@ -21,7 +20,8 @@ export const createFormQuitado = createAsyncThunk(
       const res = await formQuitadoService.createFormQuitado(forms, token);
       return res;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      console.log("Erro capturado no Thunk:", error); // Verifique este log!
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -63,7 +63,7 @@ export const deleteFormQuitado = createAsyncThunk(
     try {
       const token = thunkAPI.getState().auth.user.token;
       if (!token) throw new Error("Não autorizado.");
-      await formFinanciadoService.deleteFormFinanciado(id, token);
+      await formQuitadoService.deleteFormQuitado(id, token);
       return id;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -89,14 +89,19 @@ const formQuitadoSlice = createSlice({
       })
       .addCase(createFormQuitado.fulfilled, (state, action) => {
         state.loading = false;
-        state.forms.push(action.payload);
+        const newForm = action.payload.form;
+        state.forms.push(newForm);
         state.success = true;
         state.error = null;
       })
       .addCase(createFormQuitado.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
-        state.success = false;
+        // O payload agora é o que passamos para rejectWithValue
+        if (action.payload && action.payload.errors) {
+          state.error = action.payload.errors; // Armazena a array de mensagens de erro no estado
+        } else {
+          state.error = ["Ocorreu um erro desconhecido."]; // Fallback
+        }
       })
       .addCase(getAllFormsQuitado.pending, (state) => {
         state.loading = true;
@@ -139,11 +144,11 @@ const formQuitadoSlice = createSlice({
       })
       .addCase(deleteFormQuitado.fulfilled, (state, action) => {
         state.loading = false;
-        const deletedForm = action.payload.id;
-        if (deletedForm) {
-          state.forms = state.forms.filter((form) => form.id !== deletedForm);
+        const deletedFormId = action.payload;
+        if (deletedFormId) {
+          state.forms = state.forms.filter((form) => form.id !== deletedFormId);
+          state.success = true;
         }
-        state.success = true;
         state.error = null;
       })
       .addCase(deleteFormQuitado.rejected, (state, action) => {

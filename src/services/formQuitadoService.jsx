@@ -3,17 +3,16 @@ import { api, requestConfig } from "../utils/config";
 // Create Form
 const createFormQuitado = async (data, token) => {
   const config = requestConfig("POST", data, token);
-  try {
-    const res = await fetch(api + "/forms/quitado", config);
 
-    if (!res.ok) {
-      throw new Error(`Erro ${res.status}: ${res.statusText}`);
-    }
+  const res = await fetch(api + "/forms/quitado", config);
+
+  if (res.ok) {
     return await res.json();
-  } catch (error) {
-    console.error("Erro ao criar formulário.", error);
-    throw error;
   }
+
+  const errorData = await res.json();
+
+  throw errorData;
 };
 
 // Get Forms
