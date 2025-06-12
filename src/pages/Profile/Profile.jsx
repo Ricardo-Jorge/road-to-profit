@@ -88,11 +88,7 @@ const Profile = () => {
   } = useSelector((state) => state.formQuitado);
 
   // User and Auth
-  const {
-    user,
-    loading: userLoading,
-    error: userError,
-  } = useSelector((state) => state.user);
+  const { user, loading: userLoading } = useSelector((state) => state.user);
   const { user: userAuth } = useSelector((state) => state.auth);
 
   useEffect(() => {
@@ -110,19 +106,19 @@ const Profile = () => {
     if (alugadoError || alugadosuccess) {
       setTimeout(() => {
         dispatch(resetMessage());
-      }, 3000);
+      }, 5000);
+    }
 
-      if (financiadoError || financiadoSuccess) {
-        setTimeout(() => {
-          dispatch(resetMessageFinanciado());
-        }, 3000);
-      }
+    if (financiadoError || financiadoSuccess) {
+      setTimeout(() => {
+        dispatch(resetMessageFinanciado());
+      }, 5000);
+    }
 
-      if (quitadoError || quitadoSuccess) {
-        setTimeout(() => {
-          dispatch(resetMessageQuitado());
-        }, 3000);
-      }
+    if (quitadoError || quitadoSuccess) {
+      setTimeout(() => {
+        dispatch(resetMessageQuitado());
+      }, 5000);
     }
   }, [
     alugadoError,
@@ -264,6 +260,7 @@ const Profile = () => {
           });
       }
     } catch (rejectedValue) {
+      setIsModalOpen(false);
       console.error("Falha ao criar formulário:", rejectedValue);
     }
   };
@@ -327,11 +324,6 @@ const Profile = () => {
 
   if (userLoading || alugadoLoading || financiadoLoading || quitadoLoading)
     return <Loading />;
-  if (userError) return <Message msg={`${userError}`} type={"error"} />;
-  if (alugadoError) return <Message msg={`${alugadoError}`} type={"error"} />;
-  if (financiadoError)
-    return <Message msg={`${financiadoError}`} type={"error"} />;
-  if (quitadoError) return <Message msg={`${quitadoError}`} type={"error"} />;
 
   // Função para formatar a data
   const formatDate = (dateString) => {
@@ -346,10 +338,10 @@ const Profile = () => {
   };
 
   // Ajuste para lidar com a estrutura aninhada, se necessário
-  const userData = user.user || user; // Desaninha se necessário
-  const formsDataAlugado = alugadoForms.forms || alugadoForms; // Desaninha se necessário
-  const formsDataFinanciado = financiadoForms.forms || financiadoForms; // Desaninha se necessário
-  const formsDataQuitado = quitadoForms.forms || quitadoForms; // Desaninha se necessário
+  const userData = user.user || user;
+  const formsDataAlugado = alugadoForms.forms || alugadoForms;
+  const formsDataFinanciado = financiadoForms.forms || financiadoForms;
+  const formsDataQuitado = quitadoForms.forms || quitadoForms;
 
   return (
     <div className="profile_container">
@@ -370,14 +362,12 @@ const Profile = () => {
       </section>
 
       <h2 className="forms_header">Seus Formularios</h2>
+
+      {/* Mensagens */}
       {alugadoError && <Message msg={`${alugadoError}`} type={"error"} />}
-      {quitadoError &&
-        quitadoError.map((msg, i) => (
-          <Message key={i} msg={`${msg}`} type={"error"} />
-        ))}
-      {alugadosuccess && (
-        <Message msg={"Ação realizada com sucesso!"} type={"success"} />
-      )}
+      {financiadoError && <Message msg={`${financiadoError}`} type={"error"} />}
+      {quitadoError && <Message msg={`${quitadoError}`} type={"error"} />}
+
       <section className="forms_section">
         {formsDataAlugado.length === 0 ? (
           <div className="form_card">

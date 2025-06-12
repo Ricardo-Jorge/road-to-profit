@@ -1,7 +1,7 @@
 import style from "./Home.module.css";
 
 //Assets
-import mainImgage from "../../assets/main-image.jpg";
+import mainImgage from "../../assets/main-image.png";
 import register from "../../assets/register.svg";
 import login from "../../assets/login.svg";
 import form from "../../assets/form.svg";
@@ -12,8 +12,8 @@ import { useNavigate } from "react-router-dom";
 const Home = () => {
   const navigate = useNavigate();
 
-  const handleClick = (name) => {
-    return navigate(`/${name}`);
+  const handleClick = () => {
+    return navigate(`/profile`);
   };
 
   return (

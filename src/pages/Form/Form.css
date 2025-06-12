@@ -4,11 +4,7 @@
   align-items: center;
   width: 100%;
   max-width: 600px;
-  margin: 20px auto;
-  padding: 20px;
   background-color: #242424; /* Mesmo fundo do btn_section e footer */
-  border-radius: 20px;
-  box-shadow: 5px 10px 18px #2b2b2b;
   box-sizing: border-box;
 }
 
@@ -18,7 +14,6 @@
   font-weight: lighter;
   text-transform: uppercase;
   font-size: 1.8rem;
-  margin-bottom: 20px;
   text-align: center;
 }
 
@@ -77,7 +72,7 @@
 @media (min-width: 1200px) {
   .form_container {
     max-width: 600px;
-    padding: 30px;
+    padding: 20px;
   }
 
   .form_container h1 {

@@ -18,48 +18,42 @@ const createFormQuitado = async (data, token) => {
 // Get Forms
 const getAllFormsQuitado = async (token) => {
   const config = requestConfig("GET", null, token);
-  try {
-    const res = await fetch(api + "/forms/quitado", config);
-    if (!res.ok) {
-      throw new Error(`Erro ${res.status}: ${res.statusText}`);
-    }
 
+  const res = await fetch(api + "/forms/quitado", config);
+  if (res.ok) {
     return await res.json();
-  } catch (error) {
-    console.error("Erro ao localizar formulários.", error);
-    throw error;
   }
+
+  const errorData = await res.json();
+
+  throw errorData;
 };
 
 // Update Form
 const updateFormQuitado = async (data, token) => {
   const config = requestConfig("PUT", data, token);
-  try {
-    const res = await fetch(api + "/forms/quitado/" + data.id, config);
-    if (!res.ok) {
-      throw new Error(`Erro ${res.status}: ${res.statusText}`);
-    }
 
+  const res = await fetch(api + "/forms/quitado/" + data.id, config);
+  if (res.ok) {
     return await res.json();
-  } catch (error) {
-    console.error("Erro ao atualizar formulário: ", error);
-    throw error;
   }
+
+  const errorData = await res.json();
+
+  throw errorData;
 };
 
 // Delete Form
 const deleteFormQuitado = async (id, token) => {
   const config = requestConfig("DELETE", null, token);
-  try {
-    const res = await fetch(api + "/forms/quitado/" + id, config);
-    if (!res.ok) {
-      throw new Error(`Erro ao deletar formulário.`);
-    }
+
+  const res = await fetch(api + "/forms/quitado/" + id, config);
+  if (res.ok) {
     return res;
-  } catch (error) {
-    console.error("Erro ao deletar formulário: ", error);
-    throw error;
   }
+  const errorData = await res.json();
+
+  throw errorData;
 };
 
 const formQuitadoService = {

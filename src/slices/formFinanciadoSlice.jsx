@@ -13,9 +13,9 @@ const initialState = {
 // Thunk create Form Financiado
 export const createFormFinanciado = createAsyncThunk(
   "formFinanciado/create",
-  async (forms, { getState, rejectWithValue }) => {
+  async (forms, thunkAPI) => {
     try {
-      const token = getState().auth.user.token;
+      const token = thunkAPI.getState().auth.user.token;
       if (!token) throw new Error("Não autorizado.");
       const res = await formFinanciadoService.createFormFinanciado(
         forms,
@@ -23,7 +23,7 @@ export const createFormFinanciado = createAsyncThunk(
       );
       return res;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -31,14 +31,14 @@ export const createFormFinanciado = createAsyncThunk(
 // Thunk Get Forms
 export const getAllFormsFinanciado = createAsyncThunk(
   "formFinanciado/getAll",
-  async (_, { getState, rejectWithValue }) => {
+  async (_, thunkAPI) => {
     try {
-      const token = getState().auth.user.token;
+      const token = thunkAPI.getState().auth.user.token;
       if (!token) throw new Error("Não autorizado.");
       const res = await formFinanciadoService.getAllFormsFinanciado(token);
       return res;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -49,6 +49,7 @@ export const updateFormFinanciado = createAsyncThunk(
   async (forms, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
+      if (!token) throw new Error("Não autorizado.");
       const res = await formFinanciadoService.updateFormFinanciado(
         forms,
         token
@@ -63,13 +64,14 @@ export const updateFormFinanciado = createAsyncThunk(
 // thunk Delete Form
 export const deleteFormFinanciado = createAsyncThunk(
   "formFinanciado/delete",
-  async (id, { getState, rejectWithValue }) => {
+  async (id, thunkAPI) => {
     try {
-      const token = getState().auth.user.token;
+      const token = thunkAPI.getState().auth.user.token;
+      if (!token) throw new Error("Não autorizado.");
       await formFinanciadoService.deleteFormFinanciado(id, token);
       return id;
     } catch (error) {
-      return rejectWithValue(error);
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -92,14 +94,19 @@ const formFinanciadoSlice = createSlice({
       })
       .addCase(createFormFinanciado.fulfilled, (state, action) => {
         state.loading = false;
-        state.forms.push(action.payload);
+        const newForm = action.payload.form;
+        state.forms.push(newForm);
         state.success = true;
         state.error = null;
       })
       .addCase(createFormFinanciado.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
-        state.success = false;
+        // O payload agora é o que passamos para rejectWithValue
+        if (action.payload && action.payload.errors) {
+          state.error = action.payload.errors; // Armazena a array de mensagens de erro no estado
+        } else {
+          state.error = ["Ocorreu um erro desconhecido."]; // Fallback
+        }
       })
       .addCase(getAllFormsFinanciado.pending, (state) => {
         state.loading = true;
@@ -142,10 +149,11 @@ const formFinanciadoSlice = createSlice({
       })
       .addCase(deleteFormFinanciado.fulfilled, (state, action) => {
         state.loading = false;
-        state.forms = state.forms.filter(
-          (form) => form.id !== action.payload.id
-        );
-        state.success = true;
+        const deletedFormId = action.payload;
+        if (deletedFormId) {
+          state.forms = state.forms.filter((form) => form.id !== deletedFormId);
+          state.success = true;
+        }
         state.error = null;
       })
       .addCase(deleteFormFinanciado.rejected, (state, action) => {

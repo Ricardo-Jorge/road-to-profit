@@ -4,73 +4,55 @@ import { api, requestConfig } from "../utils/config";
 const createFormAlugado = async (data, token) => {
   const config = requestConfig("POST", data, token);
 
-  try {
-    const res = await fetch(api + "/forms/alugado", config);
-
-    if (!res.ok) {
-      throw new Error(`Erro ${res.status}: ${res.statusText}`);
-    }
-
+  const res = await fetch(api + "/forms/alugado", config);
+  if (res.ok) {
     return await res.json();
-  } catch (error) {
-    console.error("Erro ao criar formulário:", error);
-    throw error;
   }
+
+  const errorData = await res.json();
+
+  throw errorData;
 };
 
 // Get Forms
 const getAllFormsAlugado = async (token) => {
   const config = requestConfig("GET", null, token);
-  try {
-    const res = await fetch(api + "/forms/alugado", config);
-    if (!res.ok) {
-      throw new Error(`Erro ${res.status}: ${res.statusText}`);
-    }
+
+  const res = await fetch(api + "/forms/alugado", config);
+  if (res.ok) {
     return await res.json();
-  } catch (error) {
-    console.error("Erro ao localizar formulários: ", error);
-    throw error;
   }
+
+  const errorData = await res.json();
+
+  throw errorData;
 };
 
 // Update Form
 const updateFormAlugado = async (data, token) => {
   const config = requestConfig("PUT", data, token);
 
-  try {
-    const res = await fetch(api + "/forms/alugado/" + data.id, config);
-    console.log("Dados enviados:", data);
-    console.log("Token enviado:", token);
-    console.log("Configuração:", config);
-
-    if (!res.ok) {
-      throw new Error(`Erro ${res.status}: ${res.statusText}`);
-    }
-
-    console.log("Objeto Response da API:", res); // Você já tem este
-    const responseData = await res.json();
-    console.log("DADOS RETORNADOS PELA API (após res.json()):", responseData); // <<< ADICIONE/VERIFIQUE ESTE LOG!
-    return responseData;
-  } catch (error) {
-    console.error("Erro ao atualizar formulário:", error);
-    throw error;
+  const res = await fetch(api + "/forms/alugado/" + data.id, config);
+  if (res.ok) {
+    return await res.json();
   }
+
+  const errorData = await res.json();
+
+  throw errorData;
 };
 
 // Delete Form
 const deleteFormAlugado = async (id, token) => {
   const config = requestConfig("DELETE", null, token);
 
-  try {
-    const res = await fetch(api + "/forms/alugado/" + id, config);
-    if (!res.ok) {
-      throw new Error(`Erro ao deletar formulário.`);
-    }
+  const res = await fetch(api + "/forms/alugado/" + id, config);
+  if (res.ok) {
     return res;
-  } catch (error) {
-    console.error("Erro ao deletar formulário");
-    throw error;
   }
+  const errorData = await res.json();
+
+  throw errorData;
 };
 
 const formAlugadoService = {

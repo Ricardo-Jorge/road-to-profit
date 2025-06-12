@@ -4,8 +4,8 @@ import formQuitadoService from "../services/formQuitadoService";
 // Initial State
 const initialState = {
   forms: [],
-  Loading: false,
-  error: null,
+  loading: false,
+  error: [],
   success: false,
   message: false,
 };
@@ -20,7 +20,6 @@ export const createFormQuitado = createAsyncThunk(
       const res = await formQuitadoService.createFormQuitado(forms, token);
       return res;
     } catch (error) {
-      console.log("Erro capturado no Thunk:", error); // Verifique este log!
       return thunkAPI.rejectWithValue(error);
     }
   }
@@ -36,7 +35,7 @@ export const getAllFormsQuitado = createAsyncThunk(
       const res = await formQuitadoService.getAllFormsQuitado(token);
       return res;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -51,7 +50,7 @@ export const updateFormQuitado = createAsyncThunk(
       const res = await formQuitadoService.updateFormQuitado(forms, token);
       return res;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -66,7 +65,7 @@ export const deleteFormQuitado = createAsyncThunk(
       await formQuitadoService.deleteFormQuitado(id, token);
       return id;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );

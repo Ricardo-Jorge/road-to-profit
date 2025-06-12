@@ -13,13 +13,14 @@ const initialState = {
 // Thunk create Form Alugado
 export const createFormAlugado = createAsyncThunk(
   "formAlugado/create",
-  async (forms, { getState, rejectWithValue }) => {
+  async (forms, thunkAPI) => {
     try {
-      const token = getState().auth.user.token;
+      const token = thunkAPI.getState().auth.user.token;
+      if (!token) throw new Error("Não autorizado.");
       const res = await formAlugadoService.createFormAlugado(forms, token);
       return res;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -27,14 +28,14 @@ export const createFormAlugado = createAsyncThunk(
 // Thunk Get Forms
 export const getAllFormsAlugado = createAsyncThunk(
   "formAlugado/getAll",
-  async (_, { getState, rejectWithValue }) => {
+  async (_, thunkAPI) => {
     try {
-      const token = getState().auth.user.token;
+      const token = thunkAPI.getState().auth.user.token;
       if (!token) throw new Error("Não autorizado.");
-      const response = await formAlugadoService.getAllFormsAlugado(token);
-      return response;
+      const res = await formAlugadoService.getAllFormsAlugado(token);
+      return res;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -45,11 +46,11 @@ export const updateFormAlugado = createAsyncThunk(
   async (forms, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
-      console.log("Token no thunk:", token);
+      if (!token) throw new Error("Não autorizado.");
       const res = await formAlugadoService.updateFormAlugado(forms, token);
       return res;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -57,13 +58,14 @@ export const updateFormAlugado = createAsyncThunk(
 // Thunk Delete Form
 export const deleteFormAlugado = createAsyncThunk(
   "formAlugado/delete",
-  async (id, { getState, rejectWithValue }) => {
+  async (id, thunkAPI) => {
     try {
-      const token = getState().auth.user.token;
+      const token = thunkAPI.getState().auth.user.token;
+      if (!token) throw new Error("Não autorizado.");
       await formAlugadoService.deleteFormAlugado(id, token);
       return id;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -85,18 +87,22 @@ const formAlugadoSlice = createSlice({
       .addCase(createFormAlugado.pending, (state) => {
         state.loading = true;
         state.error = null;
-        state.success = false;
       })
       .addCase(createFormAlugado.fulfilled, (state, action) => {
         state.loading = false;
-        state.forms.push(action.payload);
+        const newForm = action.payload.form;
+        state.forms.push(newForm);
         state.success = true;
         state.error = null;
       })
       .addCase(createFormAlugado.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
-        state.success = false;
+
+        if (action.payload && action.payload.errors) {
+          state.error = action.payload.errors;
+        } else {
+          state.error = ["Ocorreu um erro desconhecido."];
+        }
       })
 
       // Get All Forms
@@ -120,7 +126,6 @@ const formAlugadoSlice = createSlice({
       .addCase(updateFormAlugado.pending, (state) => {
         state.loading = true;
         state.error = null;
-        state.success = false;
       })
       .addCase(updateFormAlugado.fulfilled, (state, action) => {
         state.loading = false;
@@ -146,17 +151,18 @@ const formAlugadoSlice = createSlice({
       })
       .addCase(deleteFormAlugado.fulfilled, (state, action) => {
         state.loading = false;
-        state.forms = state.forms.filter(
-          (form) => form.id !== action.payload.id
-        );
-        state.success = true;
+        const deletedFormId = action.payload;
+        if (deletedFormId) {
+          state.forms = state.forms.filter((form) => form.id !== deletedFormId);
+          state.success = true;
+        }
         state.error = null;
       })
       .addCase(deleteFormAlugado.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         state.success = false;
-        state.message = "Erro ao deletar formulário.";
+        state.message = action.payload.message;
       });
   },
 });
