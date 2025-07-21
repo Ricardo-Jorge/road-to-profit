@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
+//Styles
+import "./Profile.css";
+
 // Icons
 import {
   BsClipboard2Data,
@@ -10,6 +13,8 @@ import {
   BsPencilSquare,
   BsTrash,
 } from "react-icons/bs";
+
+import { profile } from "../../slices/userSlice";
 
 // Slices - Alugado
 import {
@@ -19,7 +24,12 @@ import {
   updateFormAlugado,
   createFormAlugado,
 } from "../../slices/formAlugadoSlice";
-import { profile } from "../../slices/userSlice";
+
+import {
+  createReportAlugado,
+  getReportAlugado,
+  deleteReportAlugado,
+} from "../../slices/reportAlugadoSlice";
 
 // Slices - Financiado
 import {
@@ -39,9 +49,6 @@ import {
   createFormQuitado,
 } from "../../slices/formQuitadoSlice";
 
-//Styles
-import "./Profile.css";
-
 // Components
 import Loading from "../../components/Loading";
 import Message from "../../components/Message";
@@ -49,6 +56,7 @@ import Message from "../../components/Message";
 import { format, parseISO } from "date-fns";
 
 import FormAluguel from "../Form/FormAluguel";
+import ReportAlugado from "../../components/ReportAlugado";
 import FormFinanciamento from "../Form/FormFinanciamento";
 import FormQuitado from "../Form/FormQuitado";
 import MeuModal from "../../components/MeuModal";
@@ -62,6 +70,9 @@ const Profile = () => {
   const [formToEdit, setFormToEdit] = useState(null);
   const [formType, setFormType] = useState("");
   const [formData, setFormData] = useState({});
+  const [reportId, setReportId] = useState(null);
+  const [reportType, setReportType] = useState("");
+  const [typeToRender, setTypeToRender] = useState("");
 
   // Forms - Alugado
   const {
@@ -70,6 +81,17 @@ const Profile = () => {
     error: alugadoError,
     success: alugadosuccess,
   } = useSelector((state) => state.formAlugado);
+
+  // Encontre o formData específico que corresponde ao reportId selecionado
+  const formDataAlugado = alugadoForms.find((form) => form.id === reportId);
+
+  // Report - Alugado
+  const { loading: alugadoReportLoading, error: alugadoReportError } =
+    useSelector((state) => state.reportAlugado);
+
+  const reportAlugado = useSelector((state) =>
+    reportId ? state.reportAlugado.reports[reportId] : null
+  );
 
   // Forms - Financiado
   const {
@@ -136,6 +158,7 @@ const Profile = () => {
 
   const handleNewForm = (type) => {
     setFormType(type);
+    setTypeToRender("form");
     setFormData({
       ...(type === "Alugado" && {
         lucroEsperado: "",
@@ -176,6 +199,7 @@ const Profile = () => {
   };
 
   const handleDeleteForm = (id, type) => {
+    console.log(`id: ${id}, tipo: ${type}`);
     if (type === "Alugado") {
       dispatch(deleteFormAlugado(id));
     } else if (type === "Financiado") {
@@ -187,6 +211,7 @@ const Profile = () => {
 
   const handleEditForm = (form, type) => {
     setFormToEdit(form);
+    setTypeToRender("form");
     setFormType(type);
     setFormData({
       ...(type === "Alugado" && {
@@ -231,12 +256,14 @@ const Profile = () => {
     setIsModalOpen(false);
     setFormToEdit(null);
     setFormType("");
+    setTypeToRender(null);
     setFormData({});
+    setReportId(null);
+    setReportType("");
   };
 
   const handleCreateForm = async (e) => {
     e.preventDefault();
-
     const newForm = {
       ...formData,
     };
@@ -265,7 +292,7 @@ const Profile = () => {
     }
   };
 
-  const handleUpdateForm = (e) => {
+  const handleUpdateForm = async (e) => {
     e.preventDefault();
     if (!formToEdit || !formType) return;
 
@@ -274,51 +301,119 @@ const Profile = () => {
       ...formData,
     };
 
-    const actionMap = {
-      Alugado: updateFormAlugado,
-      Financiado: updateFormFinanciado,
-      Quitado: updateFormQuitado,
-    };
+    try {
+      if (formType === "Alugado") {
+        await dispatch(deleteReportAlugado(updatedForm.id)).unwrap();
+        console.log(
+          `Relatório antigo para o formulário ${updatedForm.id} invalidado.`
+        );
+      }
 
-    const action = actionMap[formType];
+      const actionMap = {
+        Alugado: updateFormAlugado,
+        Financiado: updateFormFinanciado,
+        Quitado: updateFormQuitado,
+      };
 
-    if (action) {
-      dispatch(action(updatedForm))
-        .unwrap()
-        .then(() => {
-          setIsModalOpen(false);
-          setFormToEdit(null);
-          setFormType("");
-          setFormData({});
-        })
-        .catch((err) => {
-          console.error(`Erro ao atualizar formulário ${formType}: `, err);
-        });
+      const action = actionMap[formType];
+
+      if (action) {
+        dispatch(action(updatedForm))
+          .unwrap()
+          .then(() => {
+            setIsModalOpen(false);
+            setFormToEdit(null);
+            setFormType("");
+            setFormData({});
+          });
+      }
+    } catch (error) {
+      console.error(`Erro no processo de atualização de ${formType}: `, error);
     }
   };
 
-  const renderFormFields = () => {
-    switch (formType) {
-      case "Alugado":
-        return (
-          <>
-            <FormAluguel formData={formData} setFormData={setFormData} />
-          </>
-        );
-      case "Financiado":
-        return (
-          <>
-            <FormFinanciamento formData={formData} setFormData={setFormData} />
-          </>
-        );
-      case "Quitado":
-        return (
-          <>
-            <FormQuitado formData={formData} setFormData={setFormData} />
-          </>
-        );
-      default:
-        return null;
+  const handleViewReport = async (form, type) => {
+    console.log(form.id);
+    console.log(type);
+    setReportType(type);
+    setReportId(Number(form.id));
+    setFormData(form);
+    setTypeToRender("report");
+    setIsModalOpen(true);
+  };
+
+  useEffect(() => {
+    console.log("SELECTOR KEY:", reportId, "type:", typeof reportId);
+    if (isModalOpen && reportId && !reportAlugado) {
+      const fetchOrCreateReport = async () => {
+        try {
+          const fetchedReport = await dispatch(
+            getReportAlugado(reportId)
+          ).unwrap();
+          console.log("Relatório buscado com sucesso!", fetchedReport);
+        } catch (error) {
+          console.warn("Busca falhou, tentando criar o relatório...", error);
+          try {
+            const newReport = await dispatch(
+              createReportAlugado(reportId)
+            ).unwrap();
+            console.log("Relatório criado com sucesso!", newReport);
+          } catch (alugadoReportError) {
+            console.error(
+              "Erro ao tentar criar o relatório:",
+              alugadoReportError
+            );
+          }
+        }
+      };
+      fetchOrCreateReport();
+    }
+  }, [isModalOpen, reportId, reportAlugado, dispatch]);
+
+  const renderFormFields = (type) => {
+    console.log("tipo pra renderizar: ", type);
+    if (typeToRender === "form") {
+      switch (formType) {
+        case "Alugado":
+          return (
+            <>
+              <FormAluguel formData={formData} setFormData={setFormData} />
+            </>
+          );
+        case "Financiado":
+          return (
+            <>
+              <FormFinanciamento
+                formData={formData}
+                setFormData={setFormData}
+              />
+            </>
+          );
+        case "Quitado":
+          return (
+            <>
+              <FormQuitado formData={formData} setFormData={setFormData} />
+            </>
+          );
+        default:
+          return null;
+      }
+    } else {
+      switch (reportType) {
+        case "Alugado":
+          return (
+            <>
+              <ReportAlugado
+                reportData={reportAlugado}
+                loading={alugadoReportLoading}
+                error={alugadoReportError}
+                formData={formDataAlugado}
+                loadingForm={alugadoLoading}
+                onClose={() => setIsModalOpen(false)}
+              />
+            </>
+          );
+      }
     }
   };
 
@@ -339,9 +434,9 @@ const Profile = () => {
 
   // Ajuste para lidar com a estrutura aninhada, se necessário
   const userData = user.user || user;
-  const formsDataAlugado = alugadoForms.forms || alugadoForms;
-  const formsDataFinanciado = financiadoForms.forms || financiadoForms;
-  const formsDataQuitado = quitadoForms.forms || quitadoForms;
+  const formsDataAlugado = alugadoForms;
+  const formsDataFinanciado = financiadoForms;
+  const formsDataQuitado = quitadoForms;
 
   return (
     <div className="profile_container">
@@ -380,14 +475,19 @@ const Profile = () => {
         ) : (
           <div className="forms">
             <div className="form_card">
-              <h3>Alugado</h3>
+              <h3>
+                Alugado{" "}
+                <button title="Criar" onClick={() => handleNewForm("Alugado")}>
+                  <BsClipboard2Plus />
+                </button>
+              </h3>
               {formsDataAlugado.map((form) => (
                 <>
                   <div className="form_list">
-                    <p key={form.id}>
+                    <div key={form.id}>
                       <strong>Criado:</strong>{" "}
                       {formatDate(form.createdAt) || "Não disponível"}
-                    </p>
+                    </div>
                     <div>
                       <button
                         title="Editar"
@@ -397,7 +497,7 @@ const Profile = () => {
                       </button>
                       <button
                         title="Ver relatório"
-                        // onClick={() => handleViewReport(form)}
+                        onClick={() => handleViewReport(form, "Alugado")}
                       >
                         <BsClipboard2Data />
                       </button>
@@ -442,7 +542,7 @@ const Profile = () => {
                       </button>
                       <button
                         title="Ver relatório"
-                        // onClick={() => handleViewReport(form)}
+                        //onClick={() => handleViewReport(form)}
                       >
                         <BsClipboard2Data />
                       </button>
@@ -508,36 +608,31 @@ const Profile = () => {
       {/* Modal de Edição */}
       {isModalOpen && (
         <MeuModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          <form>
-            {renderFormFields()}
-            <div className="modal-actions">
-              <button
-                type="button"
-                style={{ backgroundColor: "#FF6200", color: "#FFFFFF" }}
-                onClick={handleUpdateForm}
-              >
-                Salvar
-              </button>
-              <button
-                type="button"
-                style={{ backgroundColor: "#FF6200", color: "#FFFFFF" }}
-                onClick={handleCreateForm}
-              >
-                Novo
-              </button>
-              <button
-                type="button"
-                onClick={handleCloseModal}
-                style={{
-                  backgroundColor: "#444",
-                  color: "#FFFFFF",
-                  marginLeft: "10px",
-                }}
-              >
-                Cancelar
-              </button>
-            </div>
-          </form>
+          {renderFormFields(typeToRender)}
+          <div className="modal-actions">
+            {typeToRender === "form" && (
+              <>
+                <button
+                  type="button"
+                  style={{ backgroundColor: "#FF6200", color: "#FFFFFF" }}
+                  onClick={formToEdit ? handleUpdateForm : handleCreateForm}
+                >
+                  {formToEdit ? "Salvar" : "Criar Novo"}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCloseModal}
+                  style={{
+                    backgroundColor: "#444",
+                    color: "#FFFFFF",
+                    marginLeft: "10px",
+                  }}
+                >
+                  Cancelar
+                </button>
+              </>
+            )}
+          </div>
         </MeuModal>
       )}
     </div>

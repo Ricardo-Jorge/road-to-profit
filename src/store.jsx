@@ -4,6 +4,7 @@ import userReducer from "../src/slices/userSlice";
 import formAlugadoReducer from "../src/slices/formAlugadoSlice";
 import formFinanciadoReducer from "../src/slices/formFinanciadoSlice";
 import formQuitadoReducer from "../src/slices/formQuitadoSlice";
+import reportAlugadoReducer from "../src/slices/reportAlugadoSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
     formAlugado: formAlugadoReducer,
     formFinanciado: formFinanciadoReducer,
     formQuitado: formQuitadoReducer,
+    reportAlugado: reportAlugadoReducer,
   },
 });

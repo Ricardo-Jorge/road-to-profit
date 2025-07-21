@@ -4,7 +4,7 @@ import formFinanciadoService from "../services/formFinanciadoService";
 // Estado inicial
 const initialState = {
   forms: [],
-  Loading: false,
+  loading: false,
   error: null,
   success: false,
   message: null,
