@@ -1,10 +1,10 @@
 import { api, requestConfig } from "../utils/config";
 
 // Create Report
-const createReportAlugado = async (id, token) => {
+const createReportFinanciado = async (formId, token) => {
   const config = requestConfig("POST", null, token);
+  const res = await fetch(`${api}/forms/financiado/${formId}/report/f`, config);
 
-  const res = await fetch(`${api}/forms/alugado/${id}/report/a`, config);
   if (res.ok) {
     return await res.json();
   }
@@ -14,21 +14,23 @@ const createReportAlugado = async (id, token) => {
 };
 
 // Get Report by respective Form ID
-
-const getReportAlugado = async (id, token) => {
+const getReportFinanciado = async (formId, token) => {
   const config = requestConfig("GET", null, token);
+  const res = await fetch(`${api}/forms/financiado/${formId}/report/f`, config);
 
-  const res = await fetch(`${api}/forms/alugado/${id}/report/a`, config);
   if (res.ok) {
     return await res.json();
   }
+
   const errorData = await res.json();
   throw errorData;
 };
 
-const deleteReportAlugado = async (formId, token) => {
+// Delete Report by respective FormID
+
+const deleteReportFinanciado = async (formId, token) => {
   const config = requestConfig("DELETE", null, token);
-  const res = await fetch(`${api}/forms/alugado/${formId}/report/a`, config);
+  const res = await fetch(`${api}/forms/financiado/${formId}/report/f`, config);
 
   if (res.ok) {
     return await res.json();
@@ -38,10 +40,10 @@ const deleteReportAlugado = async (formId, token) => {
   throw errorData;
 };
 
-const reportAlugadoService = {
-  createReportAlugado,
-  getReportAlugado,
-  deleteReportAlugado,
+const reportFinanciadoService = {
+  createReportFinanciado,
+  getReportFinanciado,
+  deleteReportFinanciado,
 };
 
-export default reportAlugadoService;
+export default reportFinanciadoService;

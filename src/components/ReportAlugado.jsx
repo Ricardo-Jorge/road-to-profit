@@ -2,8 +2,6 @@
 import "./Report.css";
 
 const ReportAlugado = ({ onClose, reportData, formData, loading, error }) => {
-  console.log("info direta do componete ReportAlugado, formulário:", formData);
-  console.log("info direta do componete ReportAlugado, relatório:", reportData);
   if (loading) {
     return (
       <div className="modal">

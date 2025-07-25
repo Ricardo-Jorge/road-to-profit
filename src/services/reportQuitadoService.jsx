@@ -1,10 +1,10 @@
 import { api, requestConfig } from "../utils/config";
 
 // Create Report
-const createReportAlugado = async (id, token) => {
+const createReportQuitado = async (formId, token) => {
   const config = requestConfig("POST", null, token);
+  const res = await fetch(`${api}/forms/quitado/${formId}/report/q`, config);
 
-  const res = await fetch(`${api}/forms/alugado/${id}/report/a`, config);
   if (res.ok) {
     return await res.json();
   }
@@ -14,21 +14,23 @@ const createReportAlugado = async (id, token) => {
 };
 
 // Get Report by respective Form ID
-
-const getReportAlugado = async (id, token) => {
+const getReportQuitado = async (formId, token) => {
   const config = requestConfig("GET", null, token);
+  const res = await fetch(`${api}/forms/quitado/${formId}/report/q`, config);
 
-  const res = await fetch(`${api}/forms/alugado/${id}/report/a`, config);
   if (res.ok) {
     return await res.json();
   }
+
   const errorData = await res.json();
   throw errorData;
 };
 
-const deleteReportAlugado = async (formId, token) => {
+// Delete Report by respective FormID
+
+const deleteReportQuitado = async (formId, token) => {
   const config = requestConfig("DELETE", null, token);
-  const res = await fetch(`${api}/forms/alugado/${formId}/report/a`, config);
+  const res = await fetch(`${api}/forms/quitado/${formId}/report/q`, config);
 
   if (res.ok) {
     return await res.json();
@@ -38,10 +40,10 @@ const deleteReportAlugado = async (formId, token) => {
   throw errorData;
 };
 
-const reportAlugadoService = {
-  createReportAlugado,
-  getReportAlugado,
-  deleteReportAlugado,
+const reportQuitadoService = {
+  createReportQuitado,
+  getReportQuitado,
+  deleteReportQuitado,
 };
 
-export default reportAlugadoService;
+export default reportQuitadoService;

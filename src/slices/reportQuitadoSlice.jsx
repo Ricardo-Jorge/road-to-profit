@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import reportAlugadoService from "../services/reportAlugadoService";
+import reportQuitadoService from "../services/reportQuitadoService";
 
-// Estado inicial
 const initialState = {
   reports: {},
   loading: false,
@@ -10,14 +9,14 @@ const initialState = {
   message: null,
 };
 
-// Thunk create Report Alugado
-export const createReportAlugado = createAsyncThunk(
-  "reportAlugado/create",
+//Thunk create Report Quitado
+export const createReportQuitado = createAsyncThunk(
+  "reportQuitado/create",
   async (formId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
       if (!token) throw new Error("Não autorizado.");
-      const res = await reportAlugadoService.createReportAlugado(formId, token);
+      const res = await reportQuitadoService.createReportQuitado(formId, token);
       return res;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -26,13 +25,13 @@ export const createReportAlugado = createAsyncThunk(
 );
 
 // Thunk Get Report
-export const getReportAlugado = createAsyncThunk(
-  "reportAlugado/getOne",
+export const getReportQuitado = createAsyncThunk(
+  "reportQuitado/getOne",
   async (formId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
       if (!token) throw new Error("Não autorizado.");
-      const res = await reportAlugadoService.getReportAlugado(formId, token);
+      const res = await reportQuitadoService.getReportQuitado(formId, token);
       return res;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -40,12 +39,13 @@ export const getReportAlugado = createAsyncThunk(
   }
 );
 
-export const deleteReportAlugado = createAsyncThunk(
-  "reportAlugado/delete",
+// Thunk Get Report
+export const deleteReportQuitado = createAsyncThunk(
+  "reportQuitado/delete",
   async (formId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
-      await reportAlugadoService.deleteReportAlugado(formId, token);
+      await reportQuitadoService.deleteReportQuitado(formId, token);
       return formId;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -54,28 +54,27 @@ export const deleteReportAlugado = createAsyncThunk(
 );
 
 // Slice
-const reportAlugadoSlice = createSlice({
-  name: "reportAlugado",
+const reportQuitadoSlice = createSlice({
+  name: "reportQuitado",
   initialState,
   reducers: {
-    resetReportMessage: (state) => {
+    resetReportQuitadoMessage: (state) => {
       state.error = null;
       state.success = false;
     },
   },
   extraReducers: (builder) => {
     builder
-      // Create Report
-      .addCase(createReportAlugado.pending, (state) => {
+      .addCase(createReportQuitado.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(createReportAlugado.fulfilled, (state, action) => {
+      .addCase(createReportQuitado.fulfilled, (state, action) => {
         state.loading = false;
         const newReport = action.payload;
-        state.reports[newReport.FormAlugadoId] = newReport;
+        state.reports[newReport.FormQuitadoId] = newReport;
       })
-      .addCase(createReportAlugado.rejected, (state, action) => {
+      .addCase(createReportQuitado.rejected, (state, action) => {
         state.loading = false;
         if (action.payload && action.payload.errors) {
           state.error = action.payload.errors;
@@ -83,18 +82,18 @@ const reportAlugadoSlice = createSlice({
           state.error = ["Ocorreu um erro desconhecido."];
         }
       })
-      .addCase(getReportAlugado.pending, (state) => {
+      .addCase(getReportQuitado.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getReportAlugado.fulfilled, (state, action) => {
+      .addCase(getReportQuitado.fulfilled, (state, action) => {
         state.loading = false;
         const fetchedReport = action.payload;
-        if (fetchedReport && fetchedReport.FormAlugadoId) {
-          state.reports[fetchedReport.FormAlugadoId] = fetchedReport;
+        if (fetchedReport && fetchedReport.FormQuitadoId) {
+          state.reports[fetchedReport.FormQuitadoId] = fetchedReport;
         }
       })
-      .addCase(getReportAlugado.rejected, (state, action) => {
+      .addCase(getReportQuitado.rejected, (state, action) => {
         state.loading = false;
         if (action.payload && action.payload.errors) {
           state.error = action.payload.errors;
@@ -102,16 +101,16 @@ const reportAlugadoSlice = createSlice({
           state.error = ["Ocorreu um erro desconhecido."];
         }
       })
-      .addCase(deleteReportAlugado.pending, (state) => {
+      .addCase(deleteReportQuitado.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(deleteReportAlugado.fulfilled, (state, action) => {
+      .addCase(deleteReportQuitado.fulfilled, (state, action) => {
         const formId = action.payload;
         delete state.reports[formId];
       });
   },
 });
 
-export const { resetReportMessage } = reportAlugadoSlice.actions;
-export default reportAlugadoSlice.reducer;
+export const { resetReportQuitadoMessage } = reportQuitadoSlice.actions;
+export default reportQuitadoSlice.reducer;

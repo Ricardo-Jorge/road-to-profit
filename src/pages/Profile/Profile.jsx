@@ -40,6 +40,12 @@ import {
   createFormFinanciado,
 } from "../../slices/formFinanciadoSlice";
 
+import {
+  createReportFinanciado,
+  getReportFinanciado,
+  deleteReportFinanciado,
+} from "../../slices/reportFinanciadoSlice";
+
 // Slices - Quitado
 import {
   getAllFormsQuitado,
@@ -49,17 +55,26 @@ import {
   createFormQuitado,
 } from "../../slices/formQuitadoSlice";
 
+import {
+  createReportQuitado,
+  getReportQuitado,
+  deleteReportQuitado,
+} from "../../slices/reportQuitadoSlice";
+
 // Components
 import Loading from "../../components/Loading";
 import Message from "../../components/Message";
+import MeuModal from "../../components/MeuModal";
 
 import { format, parseISO } from "date-fns";
 
 import FormAluguel from "../Form/FormAluguel";
-import ReportAlugado from "../../components/ReportAlugado";
 import FormFinanciamento from "../Form/FormFinanciamento";
 import FormQuitado from "../Form/FormQuitado";
-import MeuModal from "../../components/MeuModal";
+
+import ReportAlugado from "../../components/ReportAlugado";
+import ReportFinanciado from "../../components/ReportFinanciado";
+import ReportQuitado from "../../components/ReportQuitado";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -101,6 +116,18 @@ const Profile = () => {
     success: financiadoSuccess,
   } = useSelector((state) => state.formFinanciado);
 
+  const formDataFinanciado = financiadoForms.find(
+    (form) => form.id === reportId
+  );
+
+  // Report - Financiado
+  const { loading: financiadoReportLoading, error: financiadoReportError } =
+    useSelector((state) => state.reportFinanciado);
+
+  const reportFinanciado = useSelector((state) =>
+    reportId ? state.reportFinanciado.reports[reportId] : null
+  );
+
   // Forms - Quitado
   const {
     forms: quitadoForms,
@@ -108,6 +135,16 @@ const Profile = () => {
     error: quitadoError,
     success: quitadoSuccess,
   } = useSelector((state) => state.formQuitado);
+
+  const formDataQuitado = quitadoForms.find((form) => form.id === reportId);
+
+  // Report - Financiado
+  const { loading: quitadoReportLoading, error: quitadoReportError } =
+    useSelector((state) => state.reportFinanciado);
+
+  const reportQuitado = useSelector((state) =>
+    reportId ? state.reportQuitado.reports[reportId] : null
+  );
 
   // User and Auth
   const { user, loading: userLoading } = useSelector((state) => state.user);
@@ -199,7 +236,6 @@ const Profile = () => {
   };
 
   const handleDeleteForm = (id, type) => {
-    console.log(`id: ${id}, tipo: ${type}`);
     if (type === "Alugado") {
       dispatch(deleteFormAlugado(id));
     } else if (type === "Financiado") {
@@ -308,6 +344,18 @@ const Profile = () => {
           `Relatório antigo para o formulário ${updatedForm.id} invalidado.`
         );
       }
+      if (formType === "Financiado") {
+        await dispatch(deleteReportFinanciado(updatedForm.id)).unwrap();
+        console.log(
+          `Relatório antigo para o formulário ${updatedForm.id} invalidado.`
+        );
+      }
+      if (formType === "Quitado") {
+        await dispatch(deleteReportQuitado(updatedForm.id)).unwrap();
+        console.log(
+          `Relatório antigo para o formulário ${updatedForm.id} invalidado.`
+        );
+      }
 
       const actionMap = {
         Alugado: updateFormAlugado,
@@ -333,8 +381,6 @@ const Profile = () => {
   };
 
   const handleViewReport = async (form, type) => {
-    console.log(form.id);
-    console.log(type);
     setReportType(type);
     setReportId(Number(form.id));
     setFormData(form);
@@ -343,8 +389,7 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    console.log("SELECTOR KEY:", reportId, "type:", typeof reportId);
-    if (isModalOpen && reportId && !reportAlugado) {
+    if (isModalOpen && reportId && !reportAlugado && reportType === "Alugado") {
       const fetchOrCreateReport = async () => {
         try {
           const fetchedReport = await dispatch(
@@ -368,10 +413,70 @@ const Profile = () => {
       };
       fetchOrCreateReport();
     }
-  }, [isModalOpen, reportId, reportAlugado, dispatch]);
+    if (
+      isModalOpen &&
+      reportId &&
+      !reportFinanciado &&
+      reportType === "Financiado"
+    ) {
+      const fetchOrCreateReport = async () => {
+        try {
+          const fetchedReport = await dispatch(
+            getReportFinanciado(reportId)
+          ).unwrap();
+          console.log("Relatório buscado com sucesso!", fetchedReport);
+        } catch (error) {
+          console.warn("Busca falhou, tentando criar o relatório...", error);
+          try {
+            const newReport = await dispatch(
+              createReportFinanciado(reportId)
+            ).unwrap();
+            console.log("Relatório criado com sucesso!", newReport);
+          } catch (financiadoReportError) {
+            console.error(
+              "Erro ao tentar criar o relatório:",
+              financiadoReportError
+            );
+          }
+        }
+      };
+      fetchOrCreateReport();
+    }
+    if (isModalOpen && reportId && !reportQuitado && reportType === "Quitado") {
+      const fetchOrCreateReport = async () => {
+        try {
+          const fetchedReport = await dispatch(
+            getReportQuitado(reportId)
+          ).unwrap();
+          console.log("Relatório buscado com sucesso!", fetchedReport);
+        } catch (error) {
+          console.warn("Busca falhou, tentando criar o relatório...", error);
+          try {
+            const newReport = await dispatch(
+              createReportQuitado(reportId)
+            ).unwrap();
+            console.log("Relatório criado com sucesso!", newReport);
+          } catch (quitadoReportError) {
+            console.error(
+              "Erro ao tentar criar o relatório:",
+              quitadoReportError
+            );
+          }
+        }
+      };
+      fetchOrCreateReport();
+    }
+  }, [
+    isModalOpen,
+    reportId,
+    reportAlugado,
+    reportFinanciado,
+    reportQuitado,
+    reportType,
+    dispatch,
+  ]);
 
-  const renderFormFields = (type) => {
-    console.log("tipo pra renderizar: ", type);
+  const renderFormFields = () => {
     if (typeToRender === "form") {
       switch (formType) {
         case "Alugado":
@@ -409,6 +514,32 @@ const Profile = () => {
                 error={alugadoReportError}
                 formData={formDataAlugado}
                 loadingForm={alugadoLoading}
+                onClose={() => setIsModalOpen(false)}
+              />
+            </>
+          );
+        case "Financiado":
+          return (
+            <>
+              <ReportFinanciado
+                reportData={reportFinanciado}
+                loading={financiadoReportLoading}
+                error={financiadoReportError}
+                formData={formDataFinanciado}
+                loadingForm={financiadoLoading}
+                onClose={() => setIsModalOpen(false)}
+              />
+            </>
+          );
+        case "Quitado":
+          return (
+            <>
+              <ReportQuitado
+                reportData={reportQuitado}
+                loading={quitadoReportLoading}
+                error={quitadoReportError}
+                formData={formDataQuitado}
+                loadingForm={quitadoLoading}
                 onClose={() => setIsModalOpen(false)}
               />
             </>
@@ -525,14 +656,22 @@ const Profile = () => {
         ) : (
           <div className="forms">
             <div className="form_card">
-              <h3>Financiado</h3>
+              <h3>
+                Financiado
+                <button
+                  title="Criar"
+                  onClick={() => handleNewForm("Financiado")}
+                >
+                  <BsClipboard2Plus />
+                </button>
+              </h3>
               {formsDataFinanciado.map((form) => (
                 <>
                   <div className="form_list">
-                    <p key={form.id}>
+                    <div key={form.id}>
                       <strong>Criado:</strong>{" "}
                       {formatDate(form.createdAt) || "Não disponível"}
-                    </p>
+                    </div>
                     <div>
                       <button
                         title="Editar"
@@ -542,7 +681,7 @@ const Profile = () => {
                       </button>
                       <button
                         title="Ver relatório"
-                        //onClick={() => handleViewReport(form)}
+                        onClick={() => handleViewReport(form, "Financiado")}
                       >
                         <BsClipboard2Data />
                       </button>
@@ -570,14 +709,19 @@ const Profile = () => {
         ) : (
           <div className="forms">
             <div className="form_card">
-              <h3>Quitado</h3>
+              <h3>
+                Quitado
+                <button title="Criar" onClick={() => handleNewForm("Quitado")}>
+                  <BsClipboard2Plus />
+                </button>
+              </h3>
               {formsDataQuitado.map((form) => (
                 <>
                   <div className="form_list">
-                    <p key={form.id}>
+                    <div key={form.id}>
                       <strong>Criado:</strong>{" "}
                       {formatDate(form.createdAt) || "Não disponível"}
-                    </p>
+                    </div>
                     <div>
                       <button
                         title="Editar"
@@ -587,7 +731,7 @@ const Profile = () => {
                       </button>
                       <button
                         title="Ver relatório"
-                        // onClick={() => handleViewReport(form)}
+                        onClick={() => handleViewReport(form, "Quitado")}
                       >
                         <BsClipboard2Data />
                       </button>
