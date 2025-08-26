@@ -1,26 +1,33 @@
 .message {
-  border-radius: 45px;
-  padding: 2.5px 5px;
-  margin: 10px;
   position: fixed;
-  display: flex;
-  justify-content: center;
+  bottom: 3rem;
+  z-index: 3001;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.2rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 0.8rem;
+  box-shadow: 0 0.5rem 0.8rem rgba(0, 0, 0, 0.2);
   align-items: center;
-  font-size: 1.2em;
-  opacity: 0.95;
   text-align: center;
+  justify-content: space-between;
+  color: #fff;
+}
+
+@media only screen and (max-width: 500px) {
+  .message {
+    width: 80%;
+    text-align: center;
+  }
 }
 
 .error {
-  color: #5a171d;
-  background-color: #e6c4c7ee;
-  border-color: #f5c6cb;
+  background-color: #e74c3c;
   border: 2px solid #5a171d;
 }
 
 .success {
-  color: #155724;
-  background-color: #b6cebbea;
-  border-color: #c3e6cb;
+  background-color: #27ae60;
   border: 2px solid #155724;
 }

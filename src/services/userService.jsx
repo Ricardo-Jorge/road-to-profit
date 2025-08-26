@@ -4,51 +4,36 @@ import { api, requestConfig } from "../utils/config";
 const profile = async (token) => {
   const config = requestConfig("GET", null, token);
 
-  try {
-    const res = await fetch(api + "/users/profile", config);
-    if (!res.ok) {
-      throw new Error(`Erro ${res.status}: ${res.statusText}`);
-    }
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.error("Erro ao obter perfil:", error);
-    throw error; // Permite que o erro seja tratado no componente que chama a função
+  const res = await fetch(api + "/users/profile", config);
+  if (res.ok) {
+    return await res.json();
   }
+  const errorData = await res.json();
+  throw errorData;
 };
 
 // Update user profile
 const updateProfile = async (data, token) => {
-  const config = requestConfig("PUT", data, token); // Removido o "true" se não houver upload
+  const config = requestConfig("PUT", data, token);
 
-  try {
-    const res = await fetch(api + "/users/update", config); // Corrigido o endpoint
-    if (!res.ok) {
-      throw new Error(`Erro ${res.status}: ${res.statusText}`);
-    }
-    const updatedData = await res.json();
-    return updatedData;
-  } catch (error) {
-    console.error("Erro ao atualizar perfil:", error);
-    throw error;
+  const res = await fetch(api + "/users/update", config);
+  if (res.ok) {
+    return await res.json();
   }
+  const errorData = await res.json();
+  throw errorData;
 };
 
 // Get user details by ID
 const getUserDetails = async (id) => {
   const config = requestConfig("GET");
 
-  try {
-    const res = await fetch(api + "/users/" + id, config);
-    if (!res.ok) {
-      throw new Error(`Erro ${res.status}: ${res.statusText}`);
-    }
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.error("Erro ao obter detalhes do usuário:", error);
-    throw error;
+  const res = await fetch(api + "/users/" + id, config);
+  if (res.ok) {
+    return await res.json();
   }
+  const errorData = await res.json();
+  throw errorData;
 };
 
 const userService = {

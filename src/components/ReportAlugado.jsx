@@ -93,7 +93,7 @@ const ReportAlugado = ({ onClose, reportData, formData, loading, error }) => {
       </div>
       <p>
         Baseado nas informações fornecidas, para obter um lucro Líquido de
-        <span className="profit"> R$ {formData.lucroEsperado}.00</span>, com a
+        <span className="profit"> R$ {formData.lucroEsperado}</span>, com a
         franquia disponível de{" "}
         <span className="values">
           {formData.kilometragemSem * 4} quilômetros{" "}

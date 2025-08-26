@@ -85,6 +85,7 @@ const Profile = () => {
   const [formToEdit, setFormToEdit] = useState(null);
   const [formType, setFormType] = useState("");
   const [formData, setFormData] = useState({});
+  const [formErrors, setFormErrors] = useState({});
   const [reportId, setReportId] = useState(null);
   const [reportType, setReportType] = useState("");
   const [typeToRender, setTypeToRender] = useState("");
@@ -482,7 +483,12 @@ const Profile = () => {
         case "Alugado":
           return (
             <>
-              <FormAluguel formData={formData} setFormData={setFormData} />
+              <FormAluguel
+                formData={formData}
+                setFormData={setFormData}
+                formErrors={formErrors}
+                setFormErrors={setFormErrors}
+              />
             </>
           );
         case "Financiado":
@@ -491,13 +497,20 @@ const Profile = () => {
               <FormFinanciamento
                 formData={formData}
                 setFormData={setFormData}
+                formErrors={formErrors}
+                setFormErrors={setFormErrors}
               />
             </>
           );
         case "Quitado":
           return (
             <>
-              <FormQuitado formData={formData} setFormData={setFormData} />
+              <FormQuitado
+                formData={formData}
+                setFormData={setFormData}
+                formErrors={formErrors}
+                setFormErrors={setFormErrors}
+              />
             </>
           );
         default:
@@ -587,7 +600,7 @@ const Profile = () => {
         </div>
       </section>
 
-      <h2 className="forms_header">Seus Formularios</h2>
+      <h2 className="forms_header">Seus Formulários</h2>
 
       {/* Mensagens */}
       {alugadoError && <Message msg={`${alugadoError}`} type={"error"} />}

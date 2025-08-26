@@ -1,11 +1,11 @@
+import "./Profile.css";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { updateProfile } from "../../slices/userSlice"; // Supondo que você tenha essa ação
-import Loading from "../../components/Loading";
-import "./Profile.css";
+import { resetMessage, updateProfile } from "../../slices/userSlice";
 import InputField from "../../components/InputField";
 import Message from "../../components/Message";
+import Loading from "../../components/Loading";
 
 const EditProfile = () => {
   const dispatch = useDispatch();
@@ -23,33 +23,34 @@ const EditProfile = () => {
     if (!userAuth.token) {
       navigate("/login");
     }
-    // Atualiza os estados locais com os dados do usuário ao carregar
     if (user) {
       setName(user.name || "");
       setEmail(user.email || "");
     }
   }, [userAuth.token, navigate, user]);
 
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        dispatch(resetMessage());
+      }, 5000);
+    }
+  }, [dispatch, error]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Validação básica
-    if (password !== confirmPassword) {
-      alert("As senhas não coincidem!");
-      return;
-    }
 
     const userData = {
       name,
       email,
-      ...(password && { password }), // Só inclui password se for fornecido
-      ...(confirmPassword && { confirmPassword }), // Só inclui password se for fornecido
+      ...(password && { password }),
+      ...(confirmPassword && { confirmPassword }),
     };
 
     dispatch(updateProfile(userData))
-      .unwrap() // Desempacota a Promise para lidar com sucesso/erro
+      .unwrap()
       .then(() => {
-        navigate("/profile"); // Redireciona para a página de perfil após sucesso
+        navigate("/profile");
       })
       .catch((err) => {
         console.error("Erro ao atualizar perfil:", err);
@@ -57,13 +58,13 @@ const EditProfile = () => {
   };
 
   if (loading) return <Loading />;
-  if (error) return <Message type={"error"} msg={error} />;
 
   return (
     <div className="profile_container">
+      {error && <Message type={"error"} msg={`${error}`} />}
       <section className="user_info">
         <h1>Editar Perfil</h1>
-        {error && <Message type={"error"} msg={error} />}
+
         <div className="info_card">
           <form onSubmit={handleSubmit}>
             <div>

@@ -110,8 +110,8 @@ const ReportFinanciado = ({
       </div>
       <p>
         Baseado nas informações fornecidas, para obter um lucro Líquido de
-        <span className="profit"> R$ {formData.lucroEsperado}.00</span>, rodando
-        um total mensal de{" "}
+        <span className="profit"> R$ {formData.lucroEsperado}</span>, rodando um
+        total mensal de{" "}
         <span className="values">{formData.kilometragemMes} quilômetros </span>
         no mês, será necessário aceitar viagens com tarifas de, no minimo,{" "}
         <span className="profit">R$ {reportData.faturamentoKm}</span>. Seu custo

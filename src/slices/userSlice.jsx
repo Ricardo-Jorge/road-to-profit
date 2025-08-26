@@ -9,30 +9,28 @@ const initialState = {
   message: null,
 };
 
-export const profile = createAsyncThunk(
-  "user/profile",
-  async (_, { getState, rejectWithValue }) => {
-    try {
-      const token = getState().auth.user.token; // Pega o token do estado
-      if (!token) throw new Error("Token não encontrado");
-      const response = await userService.profile(token);
-      return response.user;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
+export const profile = createAsyncThunk("user/profile", async (_, thunkAPI) => {
+  try {
+    const token = thunkAPI.getState().auth.user.token;
+    if (!token) throw new Error("Token não encontrado");
+    const response = await userService.profile(token);
+    return response.user;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
   }
-);
+});
 
 // Update user details
 export const updateProfile = createAsyncThunk(
   "user/update",
   async (user, thunkAPI) => {
-    const token = thunkAPI.getState().auth.user.token;
-    const data = await userService.updateProfile(user, token);
-    if (data.errors) {
-      return thunkAPI.rejectWithValue(data.errors[0]);
+    try {
+      const token = thunkAPI.getState().auth.user.token;
+      const res = await userService.updateProfile(user, token);
+      return res;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
     }
-    return data;
   }
 );
 
@@ -41,7 +39,8 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     resetMessage: (state) => {
-      state.message = null;
+      state.error = null;
+      state.success = false;
     },
   },
   extraReducers: (builder) => {
@@ -58,7 +57,7 @@ export const userSlice = createSlice({
       })
       .addCase(profile.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload.errors;
         state.user = {};
       })
       .addCase(updateProfile.pending, (state) => {
@@ -74,8 +73,7 @@ export const userSlice = createSlice({
       })
       .addCase(updateProfile.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
-        state.user = {};
+        state.error = action.payload.errors;
       });
   },
 });

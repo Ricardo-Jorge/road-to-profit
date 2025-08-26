@@ -162,7 +162,6 @@ const formAlugadoSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
         state.success = false;
-        state.message = action.payload.message;
       });
   },
 });

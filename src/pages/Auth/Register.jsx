@@ -37,8 +37,12 @@ const Register = () => {
 
   // Clean all auth states
   useEffect(() => {
-    dispatch(reset());
-  }, [dispatch]);
+    if (error) {
+      setTimeout(() => {
+        dispatch(reset());
+      }, 5000);
+    }
+  }, [dispatch, error]);
 
   return (
     <div id="register">

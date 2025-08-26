@@ -1,8 +1,8 @@
-let localUrl = "http://localhost:8001/api/v1";
+//let localUrl = "http://localhost:8001/api/v1";
 let serverUrl =
-  "http://ec2-3-148-127-48.us-east-2.compute.amazonaws.com:49160/api/v1";
+  "http://ec2-3-135-198-37.us-east-2.compute.amazonaws.com:49160/api/v1";
 
-export const api = localUrl;
+export const api = serverUrl;
 
 export const requestConfig = (method, data = null, token = null) => {
   // Cria o objeto de configuração basico

@@ -16,9 +16,9 @@
 }
 
 .user_info h1 {
-  font-family: "Angkor";
+  font-family: "Alfa Slab One";
   color: #ff7904;
-  font-weight: lighter;
+  font-weight: 300;
   text-transform: uppercase;
   font-size: 1.8rem;
   text-align: center;
@@ -69,9 +69,9 @@
 }
 
 .forms_header {
-  font-family: "Angkor";
+  font-family: "Alfa Slab One";
+  font-weight: 300;
   color: #ff7904;
-  font-weight: lighter;
   text-transform: uppercase;
   font-size: 1.8rem;
   text-align: center;
