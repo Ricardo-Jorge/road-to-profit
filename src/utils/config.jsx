@@ -1,6 +1,6 @@
 //let localUrl = "http://localhost:8001/api/v1";
 let serverUrl =
-  "http://ec2-3-135-198-37.us-east-2.compute.amazonaws.com:49160/api/v1";
+  "http://ec2-18-116-236-72.us-east-2.compute.amazonaws.com:49160/api/v1";
 
 export const api = serverUrl;
 

@@ -1,18 +1,24 @@
 /* eslint-disable react/prop-types */
 
-import style from "./MeuModal.module.css";
+import "./MeuModal.css";
 
-const MeuModal = ({ isOpen, children }) => {
-  if (isOpen) {
-    return (
-      <div className={style.background_modal}>
-        <div className={style.modal}>
-          <div>{children}</div>
-        </div>
-      </div>
-    );
+const MeuModal = ({ children, isOpen, onClose, theme = "dark" }) => {
+  if (!isOpen) {
+    return null;
   }
-  return null;
+
+  const modalThemeClass = theme === "light" ? "modal--light" : "modal--dark";
+
+  return (
+    <div className="background_modal" onClick={onClose}>
+      <div
+        className={`modal ${modalThemeClass}`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div>{children}</div>
+      </div>
+    </div>
+  );
 };
 
 export default MeuModal;

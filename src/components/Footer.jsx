@@ -12,9 +12,9 @@ const Footer = () => {
         </p>
         <div className="contact-info">
           <h3>Contato</h3>
-          <p>Email: contato@roadtoprofit.com</p>
-          <p>Telefone: (11) 1234-5678</p>
+          <p>Email: strugglerdev0@gmail.com</p>
           <p>Redes Sociais: @roadtoprofit</p>
+          <p>linkedin.com/in/ricardo-la-jorge/</p>
         </div>
       </footer>
     </div>

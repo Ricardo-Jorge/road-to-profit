@@ -764,7 +764,11 @@ const Profile = () => {
       </section>
       {/* Modal de Edição */}
       {isModalOpen && (
-        <MeuModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <MeuModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          theme={typeToRender === "form" ? "dark" : "light"}
+        >
           {renderFormFields(typeToRender)}
           <div className="modal-actions">
             {typeToRender === "form" && (
