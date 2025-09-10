@@ -23,7 +23,7 @@ export const requestConfig = (method, data = null, token = null) => {
     data &&
     (method.toUpperCase() === "POST" || method.toUpperCase() === "PUT")
   ) {
-    config.body = JSON.stringify(data); // Converte os dados para JSON
+    config.body = JSON.stringify(data);
   }
 
   return config;

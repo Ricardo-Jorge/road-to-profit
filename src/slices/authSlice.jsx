@@ -14,32 +14,38 @@ const initialState = {
 export const register = createAsyncThunk(
   "auth/register",
   async (user, thunkAPI) => {
-    const data = await authService.register(user);
+    try {
+      const data = await authService.register(user, thunkAPI.dispatch);
 
-    //Check for errors
-    if (data.errors) {
-      return thunkAPI.rejectWithValue(data.errors[0]);
+      if (data.errors) {
+        return thunkAPI.rejectWithValue(data.errors[0]);
+      }
+
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
     }
-
-    return data;
   }
 );
 
 // Logout an user
 export const logout = createAsyncThunk("auth/logout", async () => {
-  await authService.logout();
+  authService.logout();
 });
 
 // Sign in an user
 export const login = createAsyncThunk("auth/login", async (user, thunkAPI) => {
-  const data = await authService.login(user);
+  try {
+    const data = await authService.login(user, thunkAPI.dispatch);
 
-  // check for errors
-  if (data.errors) {
-    return thunkAPI.rejectWithValue(data.errors[0]);
+    if (data.errors) {
+      return thunkAPI.rejectWithValue(data.errors[0]);
+    }
+
+    return data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
   }
-
-  return data;
 });
 
 export const authSlice = createSlice({
