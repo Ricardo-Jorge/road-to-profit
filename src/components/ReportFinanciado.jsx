@@ -21,7 +21,7 @@ const ReportFinanciado = ({
   // 2. Se ocorreu um erro, mostre a mensagem de erro.
   if (error) {
     return (
-      <div className="modal">
+      <div className="modal_content">
         <div className="modal_header">
           <h1>Erro</h1>
           <button className="close_button" onClick={onClose}>
@@ -49,7 +49,7 @@ const ReportFinanciado = ({
     );
   }
   return (
-    <div className="modal">
+    <div className="modal_content">
       {" "}
       <div className="modal_header">
         <h1>Resultado do Calculo:</h1>

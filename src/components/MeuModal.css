@@ -1,4 +1,3 @@
-/* Base para o fundo que escurece a tela */
 .background_modal {
   position: fixed;
   top: 0;
@@ -9,8 +8,6 @@
   z-index: 1000;
 }
 
-/* 1. ESTILOS BASE DO MODAL (Estrutura e Posição) */
-/* Esta classe será usada em AMBOS os modais */
 .modal {
   position: fixed;
   top: 50%;
@@ -23,34 +20,30 @@
   max-width: 90%;
   padding: 20px;
   margin: 0;
-  overflow-y: auto; /* Melhor que 'scroll' para só mostrar a barra se necessário */
+  overflow-y: auto;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
   box-sizing: border-box;
 }
 
-/* Esconde a barra de rolagem (opcional, mas você já tinha) */
 .modal::-webkit-scrollbar {
   width: 0px;
 }
 
-/* 2. MODIFICADOR DE TEMA CLARO (Para o Relatório) */
 .modal--light {
-  background-color: #ececec; /* Fundo claro */
-  color: #121212; /* Texto escuro */
+  background-color: #ececec;
+  color: #121212;
 }
 
-/* 3. MODIFICADOR DE TEMA ESCURO (Para o Formulário) */
 .modal--dark {
-  background-color: #242424; /* Fundo escuro */
-  color: #ffffff; /* Texto claro */
+  background-color: #242424;
+  color: #ffffff;
 }
 
-/* Estilos do cabeçalho do modal (botão de fechar) */
 .modal_header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px; /* Adiciona um espaço abaixo do título/botão */
+  margin-bottom: 15px;
 }
 
 .close_button {

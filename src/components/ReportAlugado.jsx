@@ -43,7 +43,7 @@ const ReportAlugado = ({ onClose, reportData, formData, loading, error }) => {
     );
   }
   return (
-    <div className="modal">
+    <div className="modal_content">
       <div className="modal_header">
         <h1>Resultado do Calculo:</h1>
         <button className="close_button" onClick={onClose}>

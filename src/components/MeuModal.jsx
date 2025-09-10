@@ -2,7 +2,7 @@
 
 import "./MeuModal.css";
 
-const MeuModal = ({ children, isOpen, onClose, theme = "dark" }) => {
+const MeuModal = ({ children, isOpen, onClose, theme }) => {
   if (!isOpen) {
     return null;
   }
