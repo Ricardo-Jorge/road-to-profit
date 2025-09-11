@@ -2,20 +2,24 @@ import { requestConfig } from "../utils/config";
 import apiClient from "../utils/apiClient";
 
 // Register an user
-const register = async (data) => {
+const register = async (data, dispatch) => {
   const config = requestConfig("post", data);
 
-  const jsonData = await apiClient("/users/register", config);
+  const res = await apiClient("/users/register", config, dispatch);
 
-  const userData = {
-    id: jsonData.user?.id || jsonData.id,
-    token: jsonData.token,
-  };
+  if (res) {
+    const userData = {
+      id: res.user?.id || res.id,
+      token: res.token,
+    };
 
-  if (userData.id && userData.token) {
-    localStorage.setItem("user", JSON.stringify(userData));
+    if (userData.id && userData.token) {
+      localStorage.setItem("user", JSON.stringify(userData));
+    }
+    return userData;
   }
-  return userData;
+  const errorData = await res.json();
+  throw errorData;
 };
 
 // Logout an User
@@ -27,17 +31,22 @@ const logout = () => {
 const login = async (data, dispatch) => {
   const config = requestConfig("post", data);
 
-  const jsonData = await apiClient("/users/login", config, dispatch);
+  const res = await apiClient("/users/login", config, dispatch);
 
-  const userData = {
-    id: jsonData.id,
-    token: jsonData.token,
-  };
+  if (res) {
+    const userData = {
+      id: res.id,
+      token: res.token,
+    };
 
-  if (userData.id && userData.token) {
-    localStorage.setItem("user", JSON.stringify(userData));
+    if (userData.id && userData.token) {
+      localStorage.setItem("user", JSON.stringify(userData));
+    }
+    return userData;
   }
-  return userData;
+
+  const errorData = await res.json();
+  throw errorData;
 };
 
 const authService = {

@@ -16,7 +16,7 @@ const apiClient = async (url, config, dispatch) => {
   } catch (error) {
     // Erro de rede (servidor offline, etc)
     console.error("Erro de rede:", error);
-    throw { errors: ["Não foi possível conectar ao servidor."] };
+    throw new Error("Não foi possível conectar ao servidor.");
   }
 
   // Se a resposta indicar um erro 401 (token expirado/inválido)
@@ -24,7 +24,7 @@ const apiClient = async (url, config, dispatch) => {
     console.log("Token expirado ou inválido. Realizando logout.");
     // Dispara a ação de logout. O thunk/slice cuidará de limpar o estado e o localStorage.
     dispatch({ type: "auth/logout" });
-    throw { errors: ["Sua sessão expirou. Por favor, faça login novamente."] };
+    throw new Error("Sua sessão expirou. Por favor, faça login novamente.");
   }
 
   // Se a resposta for qualquer outro erro

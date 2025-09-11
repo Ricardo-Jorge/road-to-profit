@@ -14,7 +14,16 @@ const Footer = () => {
           <h3>Contato</h3>
           <p>Email: strugglerdev0@gmail.com</p>
           <p>Redes Sociais: @roadtoprofit</p>
-          <p>linkedin.com/in/ricardo-la-jorge/</p>
+          <p>
+            Desenvolvedor:{" "}
+            <a
+              href="https://linkedin.com/in/ricardo-la-jorge/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Ricardo Jorge
+            </a>
+          </p>
         </div>
       </footer>
     </div>

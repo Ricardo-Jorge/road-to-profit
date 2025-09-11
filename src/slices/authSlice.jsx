@@ -5,7 +5,7 @@ const user = JSON.parse(localStorage.getItem("user"));
 
 const initialState = {
   user: user ? user : null,
-  error: false,
+  error: null,
   success: false,
   loading: false,
 };
@@ -16,10 +16,6 @@ export const register = createAsyncThunk(
   async (user, thunkAPI) => {
     try {
       const data = await authService.register(user, thunkAPI.dispatch);
-
-      if (data.errors) {
-        return thunkAPI.rejectWithValue(data.errors[0]);
-      }
 
       return data;
     } catch (error) {
@@ -38,10 +34,6 @@ export const login = createAsyncThunk("auth/login", async (user, thunkAPI) => {
   try {
     const data = await authService.login(user, thunkAPI.dispatch);
 
-    if (data.errors) {
-      return thunkAPI.rejectWithValue(data.errors[0]);
-    }
-
     return data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
@@ -54,7 +46,7 @@ export const authSlice = createSlice({
   reducers: {
     reset: (state) => {
       state.loading = false;
-      state.error = false;
+      state.error = null;
       state.success = false;
     },
   },
@@ -62,7 +54,7 @@ export const authSlice = createSlice({
     builder
       .addCase(register.pending, (state) => {
         state.loading = true;
-        state.error = false;
+        state.error = null;
       })
       .addCase(register.fulfilled, (state, action) => {
         state.loading = false;
@@ -72,7 +64,11 @@ export const authSlice = createSlice({
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        if (action.payload && action.payload.errors) {
+          state.error = action.payload.errors;
+        } else {
+          state.error = ["Ocorreu um erro desconhecido."];
+        }
         state.user = null;
       })
       .addCase(logout.fulfilled, (state) => {
@@ -83,7 +79,7 @@ export const authSlice = createSlice({
       })
       .addCase(login.pending, (state) => {
         state.loading = true;
-        state.error = false;
+        state.error = null;
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
@@ -93,7 +89,11 @@ export const authSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        if (action.payload && action.payload.errors) {
+          state.error = action.payload.errors;
+        } else {
+          state.error = ["Ocorreu um erro desconhecido."];
+        }
         state.user = null;
       });
   },
