@@ -1,4 +1,4 @@
-import "./message.css";
+import "./Message.css";
 
 // eslint-disable-next-line react/prop-types
 const Message = ({ msg, type }) => {
