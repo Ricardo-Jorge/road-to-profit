@@ -1,5 +1,5 @@
 //let localUrl = "http://localhost:8001/api/v1";
-let serverUrl = "https://api.strugglerdev.space/api/v1";
+let serverUrl = "https://api.strugglerdev.space";
 
 export const api = serverUrl;
 
