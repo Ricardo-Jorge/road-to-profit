@@ -48,7 +48,7 @@ Siga estas instruções para obter uma cópia funcional do projeto em sua máqui
 
 1.  **Clone o repositório:**
     ```bash
-     git clone [https://github.com/Ricardo-Jorge/road-to-profit.git](https://github.com/Ricardo-Jorge/road-to-profit.git)
+     git clone https://github.com/Ricardo-Jorge/road-to-profit.git
     ```
 
 2.  **Navegue até o diretório do projeto:**
