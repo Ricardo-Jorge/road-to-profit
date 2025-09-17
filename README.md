@@ -97,7 +97,7 @@ npm run lint
 Este frontend consome uma API RESTful separada para autenticação e gerenciamento de dados. O repositório do backend (construído em Node.js, Express e Sequelize) pode ser encontrado em:
 
 
-➡️ [Road to Profit - Backend](https://github.com/Ricardo-Jorge/road-to-profit-backend)
+➡️ [Road to Profit - Backend](https://github.com/Ricardo-Jorge/RTP-BACKEND)
 
 ✒️ Autor
 Ricardo Jorge - Desenvolvedor Full Stack
